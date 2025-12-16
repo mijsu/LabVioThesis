@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Activity, Mail, Lock, Loader2 } from "lucide-react";
+import { Mail, Lock, Loader2 } from "lucide-react";
 
 export default function SignUpPage() {
   const [, setLocation] = useLocation();
@@ -40,7 +40,7 @@ export default function SignUpPage() {
     try {
       await signUp(email, password);
       setLocation("/dashboard");
-    } catch (error) {
+    } catch {
       // Error handled by AuthContext
     } finally {
       setLoading(false);

@@ -26,7 +26,7 @@ export default function SignInPage() {
     try {
       await signIn(email, password);
       setLocation("/dashboard");
-    } catch (_error) {
+    } catch {
       // Error handled by AuthContext
     } finally {
       setLoading(false);

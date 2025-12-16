@@ -609,7 +609,6 @@ export default function AnalysisResultModal({
   }, [user]);
 
   // Request user location
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const requestLocation = useCallback((saveToDb: boolean = false) => {
     if (!navigator.geolocation) {
       console.warn('[Hospital Recommendation] Geolocation not supported');
@@ -681,7 +680,7 @@ export default function AnalysisResultModal({
         maximumAge: 0 // Never use cached position
       }
     );
-  }, [user, saveLocationToDatabase, isMobile]);
+  }, [user, saveLocationToDatabase, isMobile, fetchNearbyHospital]);
 
   // Fetch nearby hospitals when modal opens
   useEffect(() => {

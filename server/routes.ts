@@ -3,7 +3,6 @@ import { createServer, type Server } from "http";
 import multer from "multer";
 import { extractTextFromImage } from "./services/ocrService";
 import { analyzeLabResults } from "./services/mlService";
-import { generateComprehensiveAnalysis } from "./services/comprehensiveAnalysisService";
 import { validateLabType, validateParsedValues, ALLOWED_LAB_TYPES, type LabType } from "./services/labValidationService";
 import {
   saveLabResult,
@@ -222,9 +221,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           uploadedAt: new Date().toISOString(),
         },
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Upload error:", error);
-      res.status(500).json({ error: error.message || "Failed to process lab result" });
+      res.status(500).json({ error: (error as { message?: string }).message || "Failed to process lab result" });
     }
   });
 

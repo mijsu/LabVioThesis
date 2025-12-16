@@ -5,8 +5,7 @@ process.env.SUPPRESS_GCLOUD_CREDS_WARNING = 'true';
 process.env.NO_GCE_CHECK = 'true';
 process.env.GOOGLE_CLOUD_PROJECT = process.env.VITE_FIREBASE_PROJECT_ID || '';
 
-import express, { type Request, Response, NextFunction } from "express";
-import { spawn } from "child_process";
+import express, { type Request, type Response, type NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
@@ -31,7 +30,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
-  let capturedJsonResponse: Record<string, any> | undefined = undefined;
+  let capturedJsonResponse: Record<string, unknown> | undefined = undefined;
 
   const originalResJson = res.json;
   res.json = function (bodyJson, ...args) {
@@ -61,9 +60,10 @@ app.use((req, res, next) => {
 (async () => {
   const server = await registerRoutes(app);
 
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
+  app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+    const error = err as { status?: number; statusCode?: number; message?: string };
+    const status = error.status || error.statusCode || 500;
+    const message = error.message || "Internal Server Error";
 
     res.status(status).json({ message });
     throw err;

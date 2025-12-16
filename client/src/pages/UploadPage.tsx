@@ -154,7 +154,7 @@ export default function UploadPage() {
         title: "Analysis complete!",
         description: `Your lab results have been analyzed successfully.`,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       setShowAnalyzingModal(false);
 
       // Check if this is a validation error
