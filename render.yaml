@@ -1,0 +1,53 @@
+
+# Render.yaml configuration for LabVio
+# NOTE: This application is optimized for Replit Deployments
+# Use Replit's native deployment features for best results
+
+services:
+  # Main Web Application
+  - type: web
+    name: labvio-web
+    env: node
+    region: oregon
+    plan: starter
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: ML_API_URL
+        value: https://mijsu-labvio-ml-api.hf.space
+      - key: VITE_FIREBASE_API_KEY
+        sync: false
+      - key: VITE_FIREBASE_PROJECT_ID
+        value: medchain-5af09
+      - key: VITE_FIREBASE_APP_ID
+        value: 1:284735242161:web:8460dd5a6f11a6d334c790
+      - key: GOOGLE_APPLICATION_CREDENTIALS_JSON
+        sync: false
+    healthCheckPath: /
+    
+  # Optional: ML API Service (if not using HuggingFace)
+  # Uncomment if you want to self-host the ML API
+  # - type: web
+  #   name: labvio-ml-api
+  #   env: python
+  #   region: oregon
+  #   plan: starter
+  #   rootDir: ml_model
+  #   buildCommand: pip install -r requirements.txt
+  #   startCommand: python predict_api.py
+  #   envVars:
+  #     - key: PORT
+  #       value: 5001
+  #   healthCheckPath: /health
+
+# Database (if needed in the future)
+# databases:
+#   - name: labvio-db
+#     databaseName: labvio
+#     user: labvio
+#     region: oregon
+#     plan: starter
