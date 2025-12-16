@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/161</span>
+                <span class='fraction'>0/158</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/80</span>
+                <span class='fraction'>0/73</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/161</span>
+                <span class='fraction'>0/158</span>
             </div>
         
             
@@ -430,7 +430,9 @@
 <a name='L365'></a><a href='#L365'>365</a>
 <a name='L366'></a><a href='#L366'>366</a>
 <a name='L367'></a><a href='#L367'>367</a>
-<a name='L368'></a><a href='#L368'>368</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L368'></a><a href='#L368'>368</a>
+<a name='L369'></a><a href='#L369'>369</a>
+<a name='L370'></a><a href='#L370'>370</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -502,6 +504,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -551,7 +554,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -618,7 +621,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -694,7 +697,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -752,7 +755,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -774,6 +777,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -866,8 +870,9 @@ async function <span class="fstat-no" title="function not covered" >callPythonML
 <span class="cstat-no" title="statement not covered" >    console.log(`[ML Service] Model used: ${data.model || 'gradient_boosting_unified'}`);</span>
 <span class="cstat-no" title="statement not covered" >    console.log(`[ML Service] Risk: ${data.riskLevel} (Score: ${data.riskScore}, Confidence: ${data.confidence}%)\n`);</span>
 <span class="cstat-no" title="statement not covered" >    return data;</span>
-  } catch (error: any) {
-<span class="cstat-no" title="statement not covered" >    console.error(`[ML Service] ERROR - Failed to call trained ML model:`, error.message);</span>
+  } catch (error: unknown) {
+    const errorMessage = <span class="cstat-no" title="statement not covered" >error instanceof Error ? error.message : String(error);</span>
+<span class="cstat-no" title="statement not covered" >    console.error(`[ML Service] ERROR - Failed to call trained ML model:`, errorMessage);</span>
 <span class="cstat-no" title="statement not covered" >    console.warn(`[ML Service] FALLBACK - Using default moderate risk (not from trained model)`);</span>
     // Fallback to moderate risk if API fails
 <span class="cstat-no" title="statement not covered" >    return {</span>
@@ -914,12 +919,12 @@ export async function <span class="fstat-no" title="function not covered" >analy
   };
 }
 &nbsp;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function <span class="fstat-no" title="function not covered" >analyzeCBC(</span>
   values: Record&lt;string, string | number&gt;,
   mlPrediction: { riskLevel: 'low' | 'moderate' | 'high'; riskScore: number; confidence: number }
 ): HealthAnalysisResult {
   const wbc = <span class="cstat-no" title="statement not covered" >values.wbc as number || 7.5;</span>
-  const rbc = <span class="cstat-no" title="statement not covered" >values.rbc as number || 4.7;</span>
   const hemoglobin = <span class="cstat-no" title="statement not covered" >values.hemoglobin as number || 14.5;</span>
 &nbsp;
   // Use ML model's prediction as base
@@ -981,6 +986,7 @@ function <span class="fstat-no" title="function not covered" >analyzeCBC(</span>
   };
 }
 &nbsp;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function <span class="fstat-no" title="function not covered" >analyzeLipidProfile(</span>
   values: Record&lt;string, string | number&gt;,
   mlPrediction: { riskLevel: 'low' | 'moderate' | 'high'; riskScore: number; confidence: number }
@@ -988,7 +994,6 @@ function <span class="fstat-no" title="function not covered" >analyzeLipidProfil
   const cholesterol = <span class="cstat-no" title="statement not covered" >values.cholesterol as number || 180;</span>
   const hdl = <span class="cstat-no" title="statement not covered" >values.hdl as number || 55;</span>
   const ldl = <span class="cstat-no" title="statement not covered" >values.ldl as number || 100;</span>
-  const triglycerides = <span class="cstat-no" title="statement not covered" >values.triglycerides as number || 140;</span>
 &nbsp;
   // Use ML model's prediction as base
   let riskLevel = <span class="cstat-no" title="statement not covered" >mlPrediction.riskLevel;</span>
@@ -1029,7 +1034,7 @@ function <span class="fstat-no" title="function not covered" >analyzeLipidProfil
 <span class="cstat-no" title="statement not covered" >    insights.push('Low HDL cholesterol is a risk factor for heart disease.');</span>
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (cholesterol &gt;= 200 || ldl &gt;= 130 || triglycerides &gt;= 150) {</span>
+<span class="cstat-no" title="statement not covered" >  if (cholesterol &gt;= 200 || ldl &gt;= 130) {</span>
 <span class="cstat-no" title="statement not covered" >    dietaryRecs.push('Reduce saturated fats: limit red meat, butter, and cheese');</span>
 <span class="cstat-no" title="statement not covered" >    dietaryRecs.push('Increase omega-3 fatty acids: salmon, walnuts, flaxseeds');</span>
 <span class="cstat-no" title="statement not covered" >    dietaryRecs.push('Add more soluble fiber: oats, beans, apples, citrus fruits');</span>
@@ -1057,12 +1062,12 @@ function <span class="fstat-no" title="function not covered" >analyzeLipidProfil
   };
 }
 &nbsp;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function <span class="fstat-no" title="function not covered" >analyzeGlucose(</span>
   values: Record&lt;string, string | number&gt;,
   mlPrediction: { riskLevel: 'low' | 'moderate' | 'high'; riskScore: number; confidence: number }
 ): HealthAnalysisResult {
   const glucose = <span class="cstat-no" title="statement not covered" >values.glucose as number || 95;</span>
-  const a1c = <span class="cstat-no" title="statement not covered" >values.a1c as number || 5.4;</span>
 &nbsp;
   // Use ML model's prediction as base
   let riskLevel = <span class="cstat-no" title="statement not covered" >mlPrediction.riskLevel;</span>
@@ -1115,11 +1120,11 @@ function <span class="fstat-no" title="function not covered" >analyzeGlucose(</s
   };
 }
 &nbsp;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function <span class="fstat-no" title="function not covered" >analyzeUrinalysis(</span>
   values: Record&lt;string, string | number&gt;,
   mlPrediction: { riskLevel: 'low' | 'moderate' | 'high'; riskScore: number; confidence: number }
 ): HealthAnalysisResult {
-  const ph = <span class="cstat-no" title="statement not covered" >values.ph as number || 6.0;</span>
   const protein = <span class="cstat-no" title="statement not covered" >values.protein as string || 'Negative';</span>
 &nbsp;
   // Use ML model's prediction as base
@@ -1151,6 +1156,7 @@ function <span class="fstat-no" title="function not covered" >analyzeUrinalysis(
   };
 }
 &nbsp;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function <span class="fstat-no" title="function not covered" >analyzeGeneric(</span>
   values: Record&lt;string, string | number&gt;,
   mlPrediction: { riskLevel: 'low' | 'moderate' | 'high'; riskScore: number; confidence: number }
@@ -1171,7 +1177,7 @@ function <span class="fstat-no" title="function not covered" >analyzeGeneric(</s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-16T12:30:13.292Z
+                at 2025-12-16T14:54:32.998Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

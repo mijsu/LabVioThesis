@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/144</span>
+                <span class='fraction'>0/147</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/112</span>
+                <span class='fraction'>0/114</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/142</span>
+                <span class='fraction'>0/145</span>
             </div>
         
             
@@ -818,7 +818,19 @@
 <a name='L753'></a><a href='#L753'>753</a>
 <a name='L754'></a><a href='#L754'>754</a>
 <a name='L755'></a><a href='#L755'>755</a>
-<a name='L756'></a><a href='#L756'>756</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L756'></a><a href='#L756'>756</a>
+<a name='L757'></a><a href='#L757'>757</a>
+<a name='L758'></a><a href='#L758'>758</a>
+<a name='L759'></a><a href='#L759'>759</a>
+<a name='L760'></a><a href='#L760'>760</a>
+<a name='L761'></a><a href='#L761'>761</a>
+<a name='L762'></a><a href='#L762'>762</a>
+<a name='L763'></a><a href='#L763'>763</a>
+<a name='L764'></a><a href='#L764'>764</a>
+<a name='L765'></a><a href='#L765'>765</a>
+<a name='L766'></a><a href='#L766'>766</a>
+<a name='L767'></a><a href='#L767'>767</a>
+<a name='L768'></a><a href='#L768'>768</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -839,6 +851,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1508,8 +1526,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1540,6 +1563,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1578,8 +1602,14 @@ import { createServer, type Server } from "http";
 import multer from "multer";
 import { extractTextFromImage } from "./services/ocrService";
 import { analyzeLabResults } from "./services/mlService";
-import { generateComprehensiveAnalysis } from "./services/comprehensiveAnalysisService";
 import { validateLabType, validateParsedValues, ALLOWED_LAB_TYPES, type LabType } from "./services/labValidationService";
+&nbsp;
+// Extend Express Request to include user property
+declare module "express" {
+  interface Request {
+    user?: { uid: string; email?: string };
+  }
+}
 import {
   saveLabResult,
   saveHealthAnalysis,
@@ -1797,9 +1827,9 @@ export async function <span class="fstat-no" title="function not covered" >regis
           uploadedAt: new Date().toISOString(),
         },
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
 <span class="cstat-no" title="statement not covered" >      console.error("Upload error:", error);</span>
-<span class="cstat-no" title="statement not covered" >      res.status(500).json({ error: error.message || "Failed to process lab result" });</span>
+<span class="cstat-no" title="statement not covered" >      res.status(500).json({ error: (error as { message?: string }).message || "Failed to process lab result" });</span>
     }
   });
 &nbsp;
@@ -2057,9 +2087,9 @@ export async function <span class="fstat-no" title="function not covered" >regis
           analyses,
         },
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
 <span class="cstat-no" title="statement not covered" >      console.error("Fetch data error:", error);</span>
-<span class="cstat-no" title="statement not covered" >      res.status(500).json({ error: error.message || "Failed to fetch user data" });</span>
+<span class="cstat-no" title="statement not covered" >      res.status(500).json({ error: (error as { message?: string }).message || "Failed to fetch user data" });</span>
     }
   });
 &nbsp;
@@ -2091,9 +2121,9 @@ export async function <span class="fstat-no" title="function not covered" >regis
           updatedAt: location.updatedAt,
         },
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
 <span class="cstat-no" title="statement not covered" >      console.error("Fetch location error:", error);</span>
-<span class="cstat-no" title="statement not covered" >      res.status(500).json({ error: error.message || "Failed to fetch user location" });</span>
+<span class="cstat-no" title="statement not covered" >      res.status(500).json({ error: (error as { message?: string }).message || "Failed to fetch user location" });</span>
     }
   });
 &nbsp;
@@ -2129,9 +2159,9 @@ export async function <span class="fstat-no" title="function not covered" >regis
         success: true,
         message: "Location saved successfully",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
 <span class="cstat-no" title="statement not covered" >      console.error("Save location error:", error);</span>
-<span class="cstat-no" title="statement not covered" >      res.status(500).json({ error: error.message || "Failed to save user location" });</span>
+<span class="cstat-no" title="statement not covered" >      res.status(500).json({ error: (error as { message?: string }).message || "Failed to save user location" });</span>
     }
   });
 &nbsp;
@@ -2263,7 +2293,12 @@ export async function <span class="fstat-no" title="function not covered" >regis
       const { analysisId } = <span class="cstat-no" title="statement not covered" >req.params;</span>
       
       // Get userId from verified Firebase token (set by authenticateFirebaseToken middleware)
-      const userId = <span class="cstat-no" title="statement not covered" >req.user!.uid;</span>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const userId = (<span class="cstat-no" title="statement not covered" >req as any).user?.uid;</span>
+      
+<span class="cstat-no" title="statement not covered" >      if (!userId) {</span>
+<span class="cstat-no" title="statement not covered" >        return res.status(401).json({ error: "User not authenticated" });</span>
+      }
       
 <span class="cstat-no" title="statement not covered" >      if (!analysisId) {</span>
 <span class="cstat-no" title="statement not covered" >        return res.status(400).json({ error: "Analysis ID is required" });</span>
@@ -2294,12 +2329,13 @@ export async function <span class="fstat-no" title="function not covered" >regis
         success: true,
         message: "Analysis record has been successfully deleted",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
 <span class="cstat-no" title="statement not covered" >      console.error("Delete analysis error:", error);</span>
-<span class="cstat-no" title="statement not covered" >      if (error.message.includes('Unauthorized') || error.message.includes('not found')) {</span>
-<span class="cstat-no" title="statement not covered" >        return res.status(404).json({ error: error.message });</span>
+      const errorMsg = (<span class="cstat-no" title="statement not covered" >error as { message?: string }).message || "Failed to delete analysis";</span>
+<span class="cstat-no" title="statement not covered" >      if (errorMsg.includes('Unauthorized') || errorMsg.includes('not found')) {</span>
+<span class="cstat-no" title="statement not covered" >        return res.status(404).json({ error: errorMsg });</span>
       }
-<span class="cstat-no" title="statement not covered" >      res.status(500).json({ error: error.message || "Failed to delete analysis" });</span>
+<span class="cstat-no" title="statement not covered" >      res.status(500).json({ error: errorMsg });</span>
     }
   });
 &nbsp;
@@ -2318,9 +2354,9 @@ export async function <span class="fstat-no" title="function not covered" >regis
         success: true,
         message: "Your data has been permanently deleted from MEDiscan's records.",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
 <span class="cstat-no" title="statement not covered" >      console.error("Delete error:", error);</span>
-<span class="cstat-no" title="statement not covered" >      res.status(500).json({ error: error.message || "Failed to delete user data" });</span>
+<span class="cstat-no" title="statement not covered" >      res.status(500).json({ error: (error as { message?: string }).message || "Failed to delete user data" });</span>
     }
   });
 &nbsp;
@@ -2335,7 +2371,7 @@ export async function <span class="fstat-no" title="function not covered" >regis
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-16T12:30:13.292Z
+                at 2025-12-16T14:54:32.998Z
             </div>
         <script src="../prettify.js"></script>
         <script>
