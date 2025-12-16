@@ -6,9 +6,7 @@ import {
   FileText, 
   Calendar,
   Eye,
-  ArrowDown,
   Heart,
-  Droplet,
   Zap,
   Loader2
 } from "lucide-react";
@@ -32,12 +30,17 @@ const getRiskColor = (risk: string) => {
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const [, setLocation] = useLocation();
-  const [selectedAnalysis, setSelectedAnalysis] = useState<any>(null);
+  const [selectedAnalysis, setSelectedAnalysis] = useState<Record<string, unknown> | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Fetch user's lab results and analyses
-  const { data: userData, isLoading } = useQuery<any>({
+  const { data: userData, isLoading } = useQuery<{
+    success: boolean;
+    data: {
+      labResults: unknown[];
+      analyses: unknown[];
+    };
+  }>({
     queryKey: ['/api/user', user?.uid, 'data'],
     enabled: !!user?.uid,
   });
@@ -47,14 +50,16 @@ export default function DashboardPage() {
 
   // Calculate metrics from real data
   const totalAnalyses = analyses.length;
-  const latestAnalysis = analyses.length > 0 ? analyses[0] : null; // First item is most recent (sorted desc)
-  const overallRiskLevel = latestAnalysis?.riskLevel || "unknown";
-  const totalRecommendations = analyses.reduce((count: number, analysis: any) => {
-    return count + (analysis.lifestyleRecommendations?.length || 0) + (analysis.dietaryRecommendations?.length || 0);
+  const latestAnalysis = analyses.length > 0 ? (analyses[0] as Record<string, unknown>) : null; // First item is most recent (sorted desc)
+  const overallRiskLevel = (latestAnalysis?.riskLevel as string) || "unknown";
+  const totalRecommendations = (analyses as Record<string, unknown>[]).reduce((count: number, analysis) => {
+    const lifestyle = (analysis.lifestyleRecommendations as unknown[])?.length || 0;
+    const dietary = (analysis.dietaryRecommendations as unknown[])?.length || 0;
+    return count + lifestyle + dietary;
   }, 0);
 
   // Format date helper - handle Firestore Timestamps serialized as objects
-  const parseDate = (date: any): Date | null => {
+  const parseDate = (date: Record<string, unknown> | Date | string | null | undefined): Date | null => {
     if (!date) return null;
     // Firestore Timestamp serialized as { _seconds, _nanoseconds }
     if (date._seconds !== undefined) {
@@ -70,19 +75,19 @@ export default function DashboardPage() {
     }
   };
 
-  const formatDate = (date: any) => {
+  const formatDate = (date: Record<string, unknown> | Date | string | null | undefined) => {
     const d = parseDate(date);
     if (!d || isNaN(d.getTime())) return "N/A";
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
-  const formatDateFull = (date: any) => {
+  const formatDateFull = (date: Record<string, unknown> | Date | string | null | undefined) => {
     const d = parseDate(date);
     if (!d || isNaN(d.getTime())) return "N/A";
     return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   };
 
-  const getDaysAgo = (date: any) => {
+  const getDaysAgo = (date: Record<string, unknown> | Date | string | null | undefined) => {
     const d = parseDate(date);
     if (!d || isNaN(d.getTime())) return "";
     const days = Math.floor((Date.now() - d.getTime()) / (1000 * 60 * 60 * 24));
@@ -91,7 +96,7 @@ export default function DashboardPage() {
     return `${days} days ago`;
   };
 
-  const handleViewAnalysis = (analysis: any) => {
+  const handleViewAnalysis = (analysis: Record<string, unknown>) => {
     setSelectedAnalysis(analysis);
     setIsModalOpen(true);
   };

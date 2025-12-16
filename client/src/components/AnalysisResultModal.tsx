@@ -609,6 +609,7 @@ export default function AnalysisResultModal({
   }, [user]);
 
   // Request user location
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const requestLocation = useCallback((saveToDb: boolean = false) => {
     if (!navigator.geolocation) {
       console.warn('[Hospital Recommendation] Geolocation not supported');
