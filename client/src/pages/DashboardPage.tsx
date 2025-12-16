@@ -2,16 +2,10 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Activity, 
-  TrendingUp, 
+import {
   FileText, 
-  AlertCircle, 
   Calendar,
-  Download,
-  Trash2,
   Eye,
-  ArrowUp,
   ArrowDown,
   Heart,
   Droplet,

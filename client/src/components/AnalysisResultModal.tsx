@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import {
   AlertDialog,
@@ -578,7 +578,7 @@ export default function AnalysisResultModal({
   };
 
   // Fetch saved location from database
-  const fetchSavedLocation = async (): Promise<{lat: number; lng: number} | null> => {
+  const fetchSavedLocation = useCallback(async (): Promise<{lat: number; lng: number} | null> => {
     if (!user || !user.uid) return null;
     
     try {
@@ -606,10 +606,10 @@ export default function AnalysisResultModal({
       console.error('[Hospital Recommendation] Failed to fetch saved location:', error);
       return null;
     }
-  };
+  }, [user]);
 
   // Request user location
-  const requestLocation = (saveToDb: boolean = false) => {
+  const requestLocation = useCallback((saveToDb: boolean = false) => {
     if (!navigator.geolocation) {
       console.warn('[Hospital Recommendation] Geolocation not supported');
       setLocationStatus('unavailable');
@@ -680,7 +680,7 @@ export default function AnalysisResultModal({
         maximumAge: 0 // Never use cached position
       }
     );
-  };
+  }, [user, saveLocationToDatabase, isMobile]);
 
   // Fetch nearby hospitals when modal opens
   useEffect(() => {
@@ -730,7 +730,7 @@ export default function AnalysisResultModal({
     requestLocation(true);
   };
 
-  const fetchNearbyHospital = async (location: {lat: number; lng: number} | null) => {
+  const fetchNearbyHospital = useCallback(async (location: {lat: number; lng: number} | null) => {
     try {
       const url = location 
         ? `/api/hospitals/nearby?lat=${location.lat}&lng=${location.lng}`
@@ -777,7 +777,7 @@ export default function AnalysisResultModal({
       // Set to null to prevent showing stale data
       setRecommendedHospital(null);
     }
-  };
+  }, [analysis.suggestedSpecialists]);
 
   // Determine icon and label for lab status badges
   const renderStatusForLab = (lab: Record<string, unknown>) => {
