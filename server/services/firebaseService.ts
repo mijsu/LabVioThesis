@@ -1,6 +1,6 @@
 // Firebase Admin Service for server-side Firebase operations
 import { initializeApp, cert, getApps, type ServiceAccount } from 'firebase-admin/app';
-import { getFirestore, type Firestore } from 'firebase-admin/firestore';
+import { getFirestore } from 'firebase-admin/firestore';
 import { getAuth } from 'firebase-admin/auth';
 import type { Request, Response, NextFunction } from 'express';
 import type { ComprehensiveAnalysis } from './comprehensiveAnalysisService';

@@ -999,8 +999,6 @@ function analyzeUrinalysisRules(
   
   // Chemistry parameters
   const glucose = parseFloat(String(values.glucose || 0));
-  const ketones = parseFloat(String(values.ketones || 0));
-  const nitrites = parseFloat(String(values.nitrites || 0));
   
   // Physical examination
   const color = String(values.color || 'Yellow').toLowerCase();

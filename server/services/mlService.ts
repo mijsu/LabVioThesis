@@ -67,8 +67,9 @@ async function callPythonML(labValues: Record<string, string | number>, labType:
     console.log(`[ML Service] Model used: ${data.model || 'gradient_boosting_unified'}`);
     console.log(`[ML Service] Risk: ${data.riskLevel} (Score: ${data.riskScore}, Confidence: ${data.confidence}%)\n`);
     return data;
-  } catch (error: any) {
-    console.error(`[ML Service] ERROR - Failed to call trained ML model:`, error.message);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(`[ML Service] ERROR - Failed to call trained ML model:`, errorMessage);
     console.warn(`[ML Service] FALLBACK - Using default moderate risk (not from trained model)`);
     // Fallback to moderate risk if API fails
     return {
@@ -115,12 +116,12 @@ export async function analyzeLabResults(
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function analyzeCBC(
   values: Record<string, string | number>,
   mlPrediction: { riskLevel: 'low' | 'moderate' | 'high'; riskScore: number; confidence: number }
 ): HealthAnalysisResult {
   const wbc = values.wbc as number || 7.5;
-  const rbc = values.rbc as number || 4.7;
   const hemoglobin = values.hemoglobin as number || 14.5;
 
   // Use ML model's prediction as base
@@ -182,6 +183,7 @@ function analyzeCBC(
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function analyzeLipidProfile(
   values: Record<string, string | number>,
   mlPrediction: { riskLevel: 'low' | 'moderate' | 'high'; riskScore: number; confidence: number }
@@ -189,7 +191,6 @@ function analyzeLipidProfile(
   const cholesterol = values.cholesterol as number || 180;
   const hdl = values.hdl as number || 55;
   const ldl = values.ldl as number || 100;
-  const triglycerides = values.triglycerides as number || 140;
 
   // Use ML model's prediction as base
   let riskLevel = mlPrediction.riskLevel;
@@ -258,12 +259,60 @@ function analyzeLipidProfile(
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function analyzeGlucose(
+  values: Record<string, string | number>,
+  mlPrediction: { riskLevel: 'low' | 'moderate' | 'high'; riskScore: number; confidence: number }
+): HealthAnalysisResult {
+  return {
+    riskLevel: mlPrediction.riskLevel,
+    riskScore: mlPrediction.riskScore,
+    findings: 'Glucose analysis',
+    healthInsights: [],
+    lifestyleRecommendations: [],
+    dietaryRecommendations: [],
+    suggestedSpecialists: [],
+  };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function analyzeUrinalysis(
+  values: Record<string, string | number>,
+  mlPrediction: { riskLevel: 'low' | 'moderate' | 'high'; riskScore: number; confidence: number }
+): HealthAnalysisResult {
+  return {
+    riskLevel: mlPrediction.riskLevel,
+    riskScore: mlPrediction.riskScore,
+    findings: 'Urinalysis results',
+    healthInsights: [],
+    lifestyleRecommendations: [],
+    dietaryRecommendations: [],
+    suggestedSpecialists: [],
+  };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function analyzeGeneric(
+  values: Record<string, string | number>,
+  labType: string,
+  mlPrediction: { riskLevel: 'low' | 'moderate' | 'high'; riskScore: number; confidence: number }
+): HealthAnalysisResult {
+  return {
+    riskLevel: mlPrediction.riskLevel,
+    riskScore: mlPrediction.riskScore,
+    findings: `Lab analysis results for ${labType}`,
+    healthInsights: [],
+    lifestyleRecommendations: [],
+    dietaryRecommendations: [],
+    suggestedSpecialists: [],
+  };
+}
+
 function analyzeGlucose(
   values: Record<string, string | number>,
   mlPrediction: { riskLevel: 'low' | 'moderate' | 'high'; riskScore: number; confidence: number }
 ): HealthAnalysisResult {
   const glucose = values.glucose as number || 95;
-  const a1c = values.a1c as number || 5.4;
 
   // Use ML model's prediction as base
   let riskLevel = mlPrediction.riskLevel;
@@ -320,7 +369,6 @@ function analyzeUrinalysis(
   values: Record<string, string | number>,
   mlPrediction: { riskLevel: 'low' | 'moderate' | 'high'; riskScore: number; confidence: number }
 ): HealthAnalysisResult {
-  const ph = values.ph as number || 6.0;
   const protein = values.protein as string || 'Negative';
 
   // Use ML model's prediction as base

@@ -553,7 +553,7 @@ export default function AnalysisResultModal({
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
   // Save location to database
-  const saveLocationToDatabase = async (location: {lat: number; lng: number}, accuracy: number) => {
+  const saveLocationToDatabase = useCallback(async (location: {lat: number; lng: number}, accuracy: number) => {
     if (!user) return;
     
     try {
@@ -575,7 +575,7 @@ export default function AnalysisResultModal({
     } catch (error) {
       console.error('[Hospital Recommendation] Failed to save location:', error);
     }
-  };
+  }, [user]);
 
   // Fetch saved location from database
   const fetchSavedLocation = useCallback(async (): Promise<{lat: number; lng: number} | null> => {
@@ -680,7 +680,7 @@ export default function AnalysisResultModal({
         maximumAge: 0 // Never use cached position
       }
     );
-  }, [user, saveLocationToDatabase, fetchNearbyHospital]);
+}, [saveLocationToDatabase, fetchNearbyHospital]);
 
   // Fetch nearby hospitals when modal opens
   useEffect(() => {

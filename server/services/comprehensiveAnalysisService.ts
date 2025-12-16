@@ -265,7 +265,7 @@ Return ONLY valid JSON, no additional text.`;
       correctedRiskScore: correctedRisk.riskScore
     };
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('[Comprehensive Analysis] Error:', error);
     
     // Fallback to basic analysis if OpenAI fails
@@ -280,7 +280,7 @@ function generateFallbackAnalysis(
   const labBreakdown = Object.entries(labValues).map(([key, value]) => ({
     parameter: key.toUpperCase(),
     value: String(value),
-    normalRange: (MEDICAL_REFERENCES as any)[key]?.normal || 'Varies',
+    normalRange: (MEDICAL_REFERENCES as Record<string, {normal: string}>)[key]?.normal || 'Varies',
     status: 'normal' as const,
     interpretation: `${key} level is ${value}. Please consult with your healthcare provider for detailed interpretation.`
   }));

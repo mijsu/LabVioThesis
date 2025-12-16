@@ -60,7 +60,7 @@ export async function extractTextFromImage(imageBuffer: Buffer, labType?: string
       confidence,
       parsedValues,
     };
-  } catch (error: any) {
+  } catch (error) {
     console.error('OCR extraction error:', error);
     
     // Return more specific error messages

@@ -215,7 +215,7 @@ export function validateLabType(ocrText: string, labType: LabType): ValidationRe
  * Validates parsed lab values match the expected lab type
  */
 export function validateParsedValues(
-  parsedValues: Record<string, any>,
+  parsedValues: Record<string, string | number>,
   labType: LabType
 ): ValidationResult {
   const rules = LAB_VALIDATION_RULES[labType];

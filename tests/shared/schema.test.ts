@@ -1,10 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
   userSchema,
-  labResultSchema,
-  chatMessageSchema,
-  hospitalSchema,
-  healthTipSchema,
   extractedDataSchema,
   chatRequestSchema,
   deleteUserDataRequestSchema,
@@ -12,10 +8,6 @@ import {
   labValueBreakdownSchema,
   specialistRecommendationSchema,
   type User,
-  type LabResult,
-  type ChatMessage,
-  type Hospital,
-  type HealthTip,
 } from '../../shared/schema';
 
 describe('User Schema', () => {
