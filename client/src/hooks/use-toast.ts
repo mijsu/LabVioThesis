@@ -15,23 +15,29 @@ type ToasterToast = ToastProps & {
   action?: ToastActionElement
 }
 
-type ActionType = "ADD_TOAST" | "UPDATE_TOAST" | "DISMISS_TOAST" | "REMOVE_TOAST";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const actionTypes = {
+  ADD_TOAST: "ADD_TOAST",
+  UPDATE_TOAST: "UPDATE_TOAST",
+  DISMISS_TOAST: "DISMISS_TOAST",
+  REMOVE_TOAST: "REMOVE_TOAST",
+} as const satisfies Record<string, string>;
 
 type Action =
   | {
-      type: ActionType["ADD_TOAST"]
+      type: typeof actionTypes.ADD_TOAST
       toast: ToasterToast
     }
   | {
-      type: ActionType["UPDATE_TOAST"]
+      type: typeof actionTypes.UPDATE_TOAST
       toast: Partial<ToasterToast>
     }
   | {
-      type: ActionType["DISMISS_TOAST"]
+      type: typeof actionTypes.DISMISS_TOAST
       toastId?: ToasterToast["id"]
     }
   | {
-      type: ActionType["REMOVE_TOAST"]
+      type: typeof actionTypes.REMOVE_TOAST
       toastId?: ToasterToast["id"]
     }
 

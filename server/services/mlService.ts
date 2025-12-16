@@ -231,7 +231,7 @@ function analyzeLipidProfile(
     insights.push('Low HDL cholesterol is a risk factor for heart disease.');
   }
 
-  if (cholesterol >= 200 || ldl >= 130 || triglycerides >= 150) {
+  if (cholesterol >= 200 || ldl >= 130) {
     dietaryRecs.push('Reduce saturated fats: limit red meat, butter, and cheese');
     dietaryRecs.push('Increase omega-3 fatty acids: salmon, walnuts, flaxseeds');
     dietaryRecs.push('Add more soluble fiber: oats, beans, apples, citrus fruits');
@@ -260,54 +260,6 @@ function analyzeLipidProfile(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function analyzeGlucose(
-  values: Record<string, string | number>,
-  mlPrediction: { riskLevel: 'low' | 'moderate' | 'high'; riskScore: number; confidence: number }
-): HealthAnalysisResult {
-  return {
-    riskLevel: mlPrediction.riskLevel,
-    riskScore: mlPrediction.riskScore,
-    findings: 'Glucose analysis',
-    healthInsights: [],
-    lifestyleRecommendations: [],
-    dietaryRecommendations: [],
-    suggestedSpecialists: [],
-  };
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function analyzeUrinalysis(
-  values: Record<string, string | number>,
-  mlPrediction: { riskLevel: 'low' | 'moderate' | 'high'; riskScore: number; confidence: number }
-): HealthAnalysisResult {
-  return {
-    riskLevel: mlPrediction.riskLevel,
-    riskScore: mlPrediction.riskScore,
-    findings: 'Urinalysis results',
-    healthInsights: [],
-    lifestyleRecommendations: [],
-    dietaryRecommendations: [],
-    suggestedSpecialists: [],
-  };
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function analyzeGeneric(
-  values: Record<string, string | number>,
-  labType: string,
-  mlPrediction: { riskLevel: 'low' | 'moderate' | 'high'; riskScore: number; confidence: number }
-): HealthAnalysisResult {
-  return {
-    riskLevel: mlPrediction.riskLevel,
-    riskScore: mlPrediction.riskScore,
-    findings: `Lab analysis results for ${labType}`,
-    healthInsights: [],
-    lifestyleRecommendations: [],
-    dietaryRecommendations: [],
-    suggestedSpecialists: [],
-  };
-}
-
 function analyzeGlucose(
   values: Record<string, string | number>,
   mlPrediction: { riskLevel: 'low' | 'moderate' | 'high'; riskScore: number; confidence: number }
@@ -365,6 +317,7 @@ function analyzeGlucose(
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function analyzeUrinalysis(
   values: Record<string, string | number>,
   mlPrediction: { riskLevel: 'low' | 'moderate' | 'high'; riskScore: number; confidence: number }
@@ -400,6 +353,7 @@ function analyzeUrinalysis(
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function analyzeGeneric(
   values: Record<string, string | number>,
   mlPrediction: { riskLevel: 'low' | 'moderate' | 'high'; riskScore: number; confidence: number }
