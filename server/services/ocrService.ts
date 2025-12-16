@@ -63,18 +63,20 @@ export async function extractTextFromImage(imageBuffer: Buffer, labType?: string
   } catch (error) {
     console.error('OCR extraction error:', error);
     
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    
     // Return more specific error messages
-    if (error.message?.includes('truncated') || error.message?.includes('corrupted')) {
+    if (errorMessage.includes('truncated') || errorMessage.includes('corrupted')) {
       throw new Error('Image file is corrupted or incomplete. Please upload a valid image.');
     }
-    if (error.message?.includes('timeout')) {
+    if (errorMessage.includes('timeout')) {
       throw new Error('OCR processing took too long. Please try a smaller or clearer image.');
     }
-    if (error.message?.includes('format')) {
+    if (errorMessage.includes('format')) {
       throw new Error('Invalid image format. Please upload a PNG, JPG, or JPEG file.');
     }
     
-    throw new Error(`Failed to extract text from image: ${error.message || 'Unknown error'}`);
+    throw new Error(`Failed to extract text from image: ${errorMessage || 'Unknown error'}`);
   }
 }
 

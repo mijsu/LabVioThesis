@@ -167,9 +167,11 @@ export async function generateComprehensiveAnalysis(
 ${Object.entries(labValues).map(([key, value]) => `- ${key}: ${value}`).join('\n')}
 
 **Medical Reference Ranges:**
-${Object.entries(MEDICAL_REFERENCES).map(([key, ref]) => 
-  `- ${key}: Normal ${ref.normal || 'varies'}`
-).join('\n')}
+${Object.entries(MEDICAL_REFERENCES).map(([key, ref]) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const refObj = ref as Record<string, any>;
+  return `- ${key}: Normal ${refObj.normal || refObj.optimal || 'varies'}`;
+}).join('\n')}
 
 Please provide a comprehensive medical analysis in the following JSON format:
 
@@ -280,7 +282,8 @@ function generateFallbackAnalysis(
   const labBreakdown = Object.entries(labValues).map(([key, value]) => ({
     parameter: key.toUpperCase(),
     value: String(value),
-    normalRange: (MEDICAL_REFERENCES as Record<string, {normal: string}>)[key]?.normal || 'Varies',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    normalRange: (MEDICAL_REFERENCES as any)[key]?.normal || (MEDICAL_REFERENCES as any)[key]?.optimal || 'Varies',
     status: 'normal' as const,
     interpretation: `${key} level is ${value}. Please consult with your healthcare provider for detailed interpretation.`
   }));

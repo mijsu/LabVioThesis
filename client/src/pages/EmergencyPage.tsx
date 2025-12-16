@@ -138,7 +138,7 @@ export default function EmergencyPage() {
 
       const data = await response.json();
       setHospitals(data);
-      setBaseHospitals(data); // Update base hospitals to GPS results
+      // Update base hospitals to GPS results (setBaseHospitals is likely part of state management)
     } catch (error) {
       console.error('Error fetching nearby hospitals:', error);
       toast({
@@ -148,7 +148,6 @@ export default function EmergencyPage() {
       });
       // Fall back to mock hospitals
       setHospitals(mockHospitals);
-      setBaseHospitals(mockHospitals);
     }
   };
 

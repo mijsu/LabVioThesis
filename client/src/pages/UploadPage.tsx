@@ -167,10 +167,11 @@ export default function UploadPage() {
         setShowValidationErrorModal(true);
       } else {
         // Generic error toast for non-validation errors
+        const errorMessage = error instanceof Error ? error.message : String(error);
         toast({
           variant: "destructive",
           title: "Upload failed",
-          description: error.message,
+          description: errorMessage,
         });
       }
     } finally {

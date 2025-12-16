@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,11 +9,13 @@ import {
   Eye,
   Heart,
   Zap,
-  Loader2
+  Loader2,
+  Activity
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import AnalysisResultModal from "@/components/AnalysisResultModal";
+import type { HealthAnalysis, LabResult } from "@/../../shared/schema";
 
 const getRiskColor = (risk: string) => {
   switch (risk) {
@@ -29,31 +32,31 @@ const getRiskColor = (risk: string) => {
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const [selectedAnalysis, setSelectedAnalysis] = useState<Record<string, unknown> | null>(null);
+  const [selectedAnalysis, setSelectedAnalysis] = useState<HealthAnalysis | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Fetch user's lab results and analyses
   const { data: userData, isLoading } = useQuery<{
     success: boolean;
     data: {
-      labResults: unknown[];
-      analyses: unknown[];
+      labResults: LabResult[];
+      analyses: HealthAnalysis[];
     };
   }>({
     queryKey: ['/api/user', user?.uid, 'data'],
     enabled: !!user?.uid,
   });
 
-  const labResults = userData?.data?.labResults || [];
-  const analyses = userData?.data?.analyses || [];
+  const labResults = (userData?.data?.labResults || []) as LabResult[];
+  const analyses = (userData?.data?.analyses || []) as HealthAnalysis[];
 
   // Calculate metrics from real data
   const totalAnalyses = analyses.length;
-  const latestAnalysis = analyses.length > 0 ? (analyses[0] as Record<string, unknown>) : null; // First item is most recent (sorted desc)
-  const overallRiskLevel = (latestAnalysis?.riskLevel as string) || "unknown";
-  const totalRecommendations = (analyses as Record<string, unknown>[]).reduce((count: number, analysis) => {
-    const lifestyle = (analysis.lifestyleRecommendations as unknown[])?.length || 0;
-    const dietary = (analysis.dietaryRecommendations as unknown[])?.length || 0;
+  const latestAnalysis = analyses.length > 0 ? analyses[0] : null; // First item is most recent (sorted desc)
+  const overallRiskLevel = latestAnalysis?.riskLevel || "unknown";
+  const totalRecommendations = analyses.reduce((count: number, analysis) => {
+    const lifestyle = analysis.lifestyleRecommendations?.length || 0;
+    const dietary = analysis.dietaryRecommendations?.length || 0;
     return count + lifestyle + dietary;
   }, 0);
 
@@ -61,14 +64,14 @@ export default function DashboardPage() {
   const parseDate = (date: Record<string, unknown> | Date | string | null | undefined): Date | null => {
     if (!date) return null;
     // Firestore Timestamp serialized as { _seconds, _nanoseconds }
-    if (date._seconds !== undefined) {
-      return new Date(date._seconds * 1000);
+    if (typeof date === 'object' && '_seconds' in date) {
+      return new Date((date._seconds as number) * 1000);
     }
     // Already a Date object
     if (date instanceof Date) return date;
     // Try parsing as string
     try {
-      return new Date(date);
+      return new Date(date as string);
     } catch {
       return null;
     }
@@ -95,7 +98,7 @@ export default function DashboardPage() {
     return `${days} days ago`;
   };
 
-  const handleViewAnalysis = (analysis: Record<string, unknown>) => {
+  const handleViewAnalysis = (analysis: HealthAnalysis) => {
     setSelectedAnalysis(analysis);
     setIsModalOpen(true);
   };
@@ -307,7 +310,7 @@ export default function DashboardPage() {
 
           <div className="max-h-[600px] sm:max-h-[800px] overflow-y-auto pr-2 space-y-4 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
             {analyses.length > 0 ? (
-              analyses.map((analysis: Record<string, unknown>) => (
+              analyses.map((analysis) => (
                 <Card key={analysis.id} className="backdrop-blur-sm bg-card/50 border-border/50 hover-elevate transition-all duration-200">
                   <CardHeader>
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">

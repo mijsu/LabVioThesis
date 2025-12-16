@@ -18,15 +18,16 @@ if (getApps().length === 0) {
     const serviceAccount = JSON.parse(serviceAccountJson) as Record<string, unknown>;
     
     // Extract project ID from service account (handles both snake_case and camelCase)
-    const projectId = serviceAccount.project_id ?? serviceAccount.projectId ?? process.env.GOOGLE_CLOUD_PROJECT;
+    const parsedServiceAccount = typeof serviceAccount === 'string' ? JSON.parse(serviceAccount) : serviceAccount;
+    const projectId = (parsedServiceAccount as Record<string, string>).project_id ?? (parsedServiceAccount as Record<string, string>).projectId ?? process.env.GOOGLE_CLOUD_PROJECT;
     
     if (!projectId) {
       throw new Error('Project ID not found in service account or environment');
     }
 
     // Set environment variables to prevent GCE metadata lookups
-    process.env.GOOGLE_CLOUD_PROJECT = projectId;
-    process.env.GCLOUD_PROJECT = projectId;
+    process.env.GOOGLE_CLOUD_PROJECT = projectId as string;
+    process.env.GCLOUD_PROJECT = projectId as string;
 
     // Initialize Firebase Admin with explicit project ID
     initializeApp({
@@ -152,8 +153,27 @@ export async function getChatHistory(userId: string, limit: number = 50): Promis
 
   // Sort in memory to avoid requiring a composite index
   const sorted = results.sort((a: Record<string, unknown>, b: Record<string, unknown>) => {
-    const dateA = a.timestamp instanceof Date ? a.timestamp : new Date(a.timestamp);
-    const dateB = b.timestamp instanceof Date ? b.timestamp : new Date(b.timestamp);
+    let dateA: Date;
+    let dateB: Date;
+    
+    if (a.timestamp instanceof Date) {
+      dateA = a.timestamp;
+    } else if (typeof a.timestamp === 'object' && a.timestamp !== null) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      dateA = new Date((a.timestamp as any).toDate?.() || a.timestamp);
+    } else {
+      dateA = new Date(a.timestamp as string);
+    }
+    
+    if (b.timestamp instanceof Date) {
+      dateB = b.timestamp;
+    } else if (typeof b.timestamp === 'object' && b.timestamp !== null) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      dateB = new Date((b.timestamp as any).toDate?.() || b.timestamp);
+    } else {
+      dateB = new Date(b.timestamp as string);
+    }
+    
     return dateA.getTime() - dateB.getTime(); // ascending order for chat
   });
 

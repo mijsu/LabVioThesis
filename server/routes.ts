@@ -4,6 +4,13 @@ import multer from "multer";
 import { extractTextFromImage } from "./services/ocrService";
 import { analyzeLabResults } from "./services/mlService";
 import { validateLabType, validateParsedValues, ALLOWED_LAB_TYPES, type LabType } from "./services/labValidationService";
+
+// Extend Express Request to include user property
+declare module "express" {
+  interface Request {
+    user?: { uid: string; email?: string };
+  }
+}
 import {
   saveLabResult,
   saveHealthAnalysis,
@@ -687,7 +694,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { analysisId } = req.params;
       
       // Get userId from verified Firebase token (set by authenticateFirebaseToken middleware)
-      const userId = req.user!.uid;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const userId = (req as any).user?.uid;
+      
+      if (!userId) {
+        return res.status(401).json({ error: "User not authenticated" });
+      }
       
       if (!analysisId) {
         return res.status(400).json({ error: "Analysis ID is required" });

@@ -1214,17 +1214,18 @@ export default function AnalysisResultModal({
               } 
               // Then try direct suggestedSpecialists (from rules-based analysis)
               else if (Array.isArray(analysis.suggestedSpecialists)) {
-                const specs = analysis.suggestedSpecialists as Array<{ type?: string; reason?: string; urgency?: 'routine' | 'urgent' | 'emergency' } | string>;
+                const specs = analysis.suggestedSpecialists as Array<{ type?: string; reason?: string; urgency?: 'routine' | 'soon' | 'urgent' } | string>;
                 // Handle both string and object formats
-                specialists = specs.map(spec => 
-                  typeof spec === 'string' 
+                specialists = specs.map(spec => {
+                  const baseSpec = typeof spec === 'string' 
                     ? { type: spec, reason: 'Consultation recommended based on your lab results', urgency: 'routine' as const }
                     : { 
                         type: (spec as Record<string, unknown>).type as string || 'Specialist',
                         reason: (spec as Record<string, unknown>).reason as string || 'Consultation recommended based on your lab results',
-                        urgency: ((spec as Record<string, unknown>).urgency as string || 'routine') as 'routine' | 'urgent' | 'emergency'
-                      }
-                );
+                        urgency: ((spec as Record<string, unknown>).urgency as string || 'routine') as 'routine' | 'soon' | 'urgent'
+                      };
+                  return baseSpec as Specialist;
+                });
               }
               
               if (specialists.length === 0) return null;
