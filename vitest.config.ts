@@ -6,10 +6,7 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     include: ['tests/**/*.test.ts'],
-    reporters: ['default', 'junit'],
-    outputFile: {
-      junit: 'test-results.xml',
-    },
+    reporters: ['default'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
