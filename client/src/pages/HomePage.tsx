@@ -73,7 +73,7 @@ const trustIndicators = [
 ];
 
 export default function HomePage() {
-  const { user, signInWithGoogle } = useAuth();
+  const { user } = useAuth();
 
   // Set default location on page load
   useEffect(() => {
@@ -189,7 +189,7 @@ export default function HomePage() {
             {/* Connection lines */}
             <div className="hidden md:block absolute top-12 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary/20 to-transparent" style={{ top: '3rem' }} />
             
-            {steps.map((step, index) => (
+            {steps.map((step, _index) => (
               <div key={step.number} className="relative">
                 <Card className="text-center h-full hover-elevate">
                   <CardHeader>

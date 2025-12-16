@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -120,7 +119,6 @@ const emergencyContacts = [
 
 export default function EmergencyPage() {
   const [hospitals, setHospitals] = useState(mockHospitals);
-  const [baseHospitals, setBaseHospitals] = useState(mockHospitals); // Stores either GPS results or mock data
   const [userLocation, setUserLocation] = useState<{lat: number; lng: number} | null>(null);
   const [loadingLocation, setLoadingLocation] = useState(false);
   const [expandedHospitalId, setExpandedHospitalId] = useState<string | null>(null);

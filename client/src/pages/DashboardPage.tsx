@@ -11,7 +11,6 @@ import {
   Loader2
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import AnalysisResultModal from "@/components/AnalysisResultModal";
 
@@ -308,7 +307,7 @@ export default function DashboardPage() {
 
           <div className="max-h-[600px] sm:max-h-[800px] overflow-y-auto pr-2 space-y-4 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
             {analyses.length > 0 ? (
-              analyses.map((analysis: any) => (
+              analyses.map((analysis: Record<string, unknown>) => (
                 <Card key={analysis.id} className="backdrop-blur-sm bg-card/50 border-border/50 hover-elevate transition-all duration-200">
                   <CardHeader>
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
