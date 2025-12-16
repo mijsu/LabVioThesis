@@ -577,6 +577,56 @@ export default function AnalysisResultModal({
     }
   }, [user]);
 
+  // Fetch nearby hospitals by location
+  const fetchNearbyHospital = useCallback(async (location: {lat: number; lng: number} | null) => {
+    try {
+      const url = location 
+        ? `/api/hospitals/nearby?lat=${location.lat}&lng=${location.lng}`
+        : '/api/hospitals/nearby';
+      
+      console.log('[Hospital Recommendation] Fetching hospitals with URL:', url);
+      console.log('[Hospital Recommendation] Location object:', location);
+      
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Failed to fetch hospitals');
+      
+      const hospitals: Hospital[] = await response.json();
+      console.log('[Hospital Recommendation] Received hospitals:', hospitals.length, 'hospitals');
+      
+      // Ensure we have hospitals
+      if (!hospitals || hospitals.length === 0) {
+        console.warn('No hospitals returned from API');
+        setRecommendedHospital(null);
+        return;
+      }
+      
+      // If we have suggested specialists, try to match with hospital specialties
+      if (analysis.suggestedSpecialists.length > 0) {
+        const specialistTypes = analysis.suggestedSpecialists.map(s => s.type.toLowerCase());
+        
+        // Find hospital that matches suggested specialists
+        const matchedHospital = hospitals.find(hospital => 
+          hospital.specialties.some(specialty => 
+            specialistTypes.some(type => 
+              specialty.toLowerCase().includes(type) || 
+              type.includes(specialty.toLowerCase())
+            )
+          )
+        );
+        
+        // Use matched hospital or first hospital
+        setRecommendedHospital(matchedHospital || hospitals[0]);
+      } else {
+        // No specialist suggestions, use nearest hospital
+        setRecommendedHospital(hospitals[0]);
+      }
+    } catch (error) {
+      console.error('Error fetching hospitals:', error);
+      // Set to null to prevent showing stale data
+      setRecommendedHospital(null);
+    }
+  }, [analysis.suggestedSpecialists]);
+
   // Fetch saved location from database
   const fetchSavedLocation = useCallback(async (): Promise<{lat: number; lng: number} | null> => {
     if (!user || !user.uid) return null;
@@ -729,55 +779,6 @@ export default function AnalysisResultModal({
     // Save to database when user manually enables location
     requestLocation(true);
   };
-
-  const fetchNearbyHospital = useCallback(async (location: {lat: number; lng: number} | null) => {
-    try {
-      const url = location 
-        ? `/api/hospitals/nearby?lat=${location.lat}&lng=${location.lng}`
-        : '/api/hospitals/nearby';
-      
-      console.log('[Hospital Recommendation] Fetching hospitals with URL:', url);
-      console.log('[Hospital Recommendation] Location object:', location);
-      
-      const response = await fetch(url);
-      if (!response.ok) throw new Error('Failed to fetch hospitals');
-      
-      const hospitals: Hospital[] = await response.json();
-      console.log('[Hospital Recommendation] Received hospitals:', hospitals.length, 'hospitals');
-      
-      // Ensure we have hospitals
-      if (!hospitals || hospitals.length === 0) {
-        console.warn('No hospitals returned from API');
-        setRecommendedHospital(null);
-        return;
-      }
-      
-      // If we have suggested specialists, try to match with hospital specialties
-      if (analysis.suggestedSpecialists.length > 0) {
-        const specialistTypes = analysis.suggestedSpecialists.map(s => s.type.toLowerCase());
-        
-        // Find hospital that matches suggested specialists
-        const matchedHospital = hospitals.find(hospital => 
-          hospital.specialties.some(specialty => 
-            specialistTypes.some(type => 
-              specialty.toLowerCase().includes(type) || 
-              type.includes(specialty.toLowerCase())
-            )
-          )
-        );
-        
-        // Use matched hospital or first hospital
-        setRecommendedHospital(matchedHospital || hospitals[0]);
-      } else {
-        // No specialist suggestions, use nearest hospital
-        setRecommendedHospital(hospitals[0]);
-      }
-    } catch (error) {
-      console.error('Error fetching hospitals:', error);
-      // Set to null to prevent showing stale data
-      setRecommendedHospital(null);
-    }
-  }, [analysis.suggestedSpecialists]);
 
   // Determine icon and label for lab status badges
   const renderStatusForLab = (lab: Record<string, unknown>) => {

@@ -23,6 +23,13 @@ const actionTypes = {
   REMOVE_TOAST: "REMOVE_TOAST",
 } as const satisfies Record<string, string>;
 
+let count = 0
+
+function genId() {
+  count = (count + 1) % Number.MAX_SAFE_INTEGER
+  return count.toString()
+}
+
 type Action =
   | {
       type: typeof actionTypes.ADD_TOAST
