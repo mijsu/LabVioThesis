@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import {
   userSchema,
+  labResultSchema,
+  chatMessageSchema,
+  hospitalSchema,
+  healthTipSchema,
   extractedDataSchema,
   chatRequestSchema,
   deleteUserDataRequestSchema,
