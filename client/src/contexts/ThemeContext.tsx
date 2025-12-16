@@ -26,7 +26,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     // No-op: theme is locked to dark
   };
 
-  const setTheme = (newTheme: Theme) => {
+  const setTheme = (_newTheme: Theme) => {
     // No-op: theme is locked to dark
   };
 

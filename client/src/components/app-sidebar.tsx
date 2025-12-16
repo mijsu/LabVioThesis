@@ -4,7 +4,6 @@ import {
   LayoutDashboard,
   Lightbulb,
   AlertCircle,
-  User,
   LogOut,
 } from "lucide-react";
 import {

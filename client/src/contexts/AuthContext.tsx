@@ -41,14 +41,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         title: "Welcome back!",
         description: `Signed in as ${result.user.email}`,
       });
-    } catch (error: any) {
-      const message = error.code === "auth/invalid-credential" 
+    } catch (error: unknown) {
+      const errorObj = error as { code?: string; message?: string };
+      const message = errorObj.code === "auth/invalid-credential" 
         ? "Invalid email or password" 
-        : error.code === "auth/user-not-found"
+        : errorObj.code === "auth/user-not-found"
         ? "No account found with this email"
-        : error.code === "auth/wrong-password"
+        : errorObj.code === "auth/wrong-password"
         ? "Incorrect password"
-        : error.message;
+        : errorObj.message || "An error occurred";
       
       toast({
         variant: "destructive",
@@ -66,14 +67,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         title: "Account created!",
         description: `Welcome to LabVio, ${result.user.email}`,
       });
-    } catch (error: any) {
-      const message = error.code === "auth/email-already-in-use"
+    } catch (error: unknown) {
+      const errorObj = error as { code?: string; message?: string };
+      const message = errorObj.code === "auth/email-already-in-use"
         ? "An account with this email already exists"
-        : error.code === "auth/weak-password"
+        : errorObj.code === "auth/weak-password"
         ? "Password should be at least 6 characters"
-        : error.code === "auth/invalid-email"
+        : errorObj.code === "auth/invalid-email"
         ? "Invalid email address"
-        : error.message;
+        : errorObj.message || "An error occurred";
       
       toast({
         variant: "destructive",
@@ -91,11 +93,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         title: "Signed out",
         description: "You have been signed out successfully",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorObj = error as { message?: string };
       toast({
         variant: "destructive",
         title: "Sign-out failed",
-        description: error.message,
+        description: errorObj.message || "An error occurred",
       });
       throw error;
     }

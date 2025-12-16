@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Activity, Home, Upload, LayoutDashboard, Heart, AlertCircle, Menu, X, LogOut } from "lucide-react";
+import { Home, Upload, LayoutDashboard, Heart, AlertCircle, Menu, X, LogOut } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Topbar() {

@@ -130,8 +130,8 @@ export async function getNearbyHospitals(
 export async function getUserData(userId: string): Promise<{
   success: boolean;
   data: {
-    labResults: any[];
-    analyses: any[];
+    labResults: unknown[];
+    analyses: unknown[];
   };
 }> {
   const response = await fetch(`/api/user/${userId}/data`);
