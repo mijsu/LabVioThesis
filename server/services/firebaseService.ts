@@ -1,6 +1,6 @@
 // Firebase Admin Service for server-side Firebase operations
 import { initializeApp, cert, getApps, type ServiceAccount } from 'firebase-admin/app';
-import { getFirestore, Firestore } from 'firebase-admin/firestore';
+import { getFirestore, type Firestore } from 'firebase-admin/firestore';
 import { getAuth } from 'firebase-admin/auth';
 import type { Request, Response, NextFunction } from 'express';
 import type { ComprehensiveAnalysis } from './comprehensiveAnalysisService';
@@ -15,7 +15,7 @@ if (getApps().length === 0) {
       throw new Error('FIREBASE_SERVICE_ACCOUNT_JSON environment variable is not set');
     }
 
-    const serviceAccount = JSON.parse(serviceAccountJson) as any;
+    const serviceAccount = JSON.parse(serviceAccountJson) as Record<string, unknown>;
     
     // Extract project ID from service account (handles both snake_case and camelCase)
     const projectId = serviceAccount.project_id ?? serviceAccount.projectId ?? process.env.GOOGLE_CLOUD_PROJECT;
@@ -140,7 +140,7 @@ export async function saveChatMessage(userId: string, role: string, content: str
   return docRef.id;
 }
 
-export async function getChatHistory(userId: string, limit: number = 50): Promise<any[]> {
+export async function getChatHistory(userId: string, limit: number = 50): Promise<Record<string, unknown>[]> {
   const snapshot = await db.collection('chatMessages')
     .where('userId', '==', userId)
     .get();
@@ -148,10 +148,10 @@ export async function getChatHistory(userId: string, limit: number = 50): Promis
   const results = snapshot.docs.map(doc => ({
     id: doc.id,
     ...doc.data(),
-  })) as any[];
+  })) as Record<string, unknown>[];
 
   // Sort in memory to avoid requiring a composite index
-  const sorted = results.sort((a: any, b: any) => {
+  const sorted = results.sort((a: Record<string, unknown>, b: Record<string, unknown>) => {
     const dateA = a.timestamp instanceof Date ? a.timestamp : new Date(a.timestamp);
     const dateB = b.timestamp instanceof Date ? b.timestamp : new Date(b.timestamp);
     return dateA.getTime() - dateB.getTime(); // ascending order for chat
@@ -303,7 +303,7 @@ export async function authenticateFirebaseToken(
     };
     
     next();
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Token verification error:', error);
     res.status(401).json({ error: 'Unauthorized: Invalid or expired token' });
     return;

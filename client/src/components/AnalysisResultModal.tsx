@@ -680,7 +680,7 @@ export default function AnalysisResultModal({
         maximumAge: 0 // Never use cached position
       }
     );
-  }, [user, saveLocationToDatabase, isMobile, fetchNearbyHospital]);
+  }, [user, saveLocationToDatabase, fetchNearbyHospital]);
 
   // Fetch nearby hospitals when modal opens
   useEffect(() => {

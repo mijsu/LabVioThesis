@@ -115,7 +115,6 @@ function calculateCorrectedRiskAssessment(
   
   // Calculate severity percentage
   const abnormalPercentage = totalParameters > 0 ? (abnormalCount / totalParameters) * 100 : 0;
-  const borderlinePercentage = totalParameters > 0 ? (borderlineCount / totalParameters) * 100 : 0;
   
   // Override ML assessment if comprehensive analysis shows severe issues
   if (urgentSpecialists > 0 || abnormalCount >= 3) {

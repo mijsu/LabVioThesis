@@ -3,7 +3,6 @@ import {
   ALLOWED_LAB_TYPES,
   validateLabType,
   validateParsedValues,
-  type LabType,
 } from '../../server/services/labValidationService';
 
 describe('Lab Validation Service - ALLOWED_LAB_TYPES', () => {

@@ -20,7 +20,7 @@ const actionTypes = {
   UPDATE_TOAST: "UPDATE_TOAST",
   DISMISS_TOAST: "DISMISS_TOAST",
   REMOVE_TOAST: "REMOVE_TOAST",
-} as const;
+} as const satisfies Record<string, string>;
 
 type ActionType = typeof actionTypes[keyof typeof actionTypes];
 

@@ -481,9 +481,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           analyses,
         },
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Fetch data error:", error);
-      res.status(500).json({ error: error.message || "Failed to fetch user data" });
+      res.status(500).json({ error: (error as { message?: string }).message || "Failed to fetch user data" });
     }
   });
 
@@ -515,9 +515,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           updatedAt: location.updatedAt,
         },
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Fetch location error:", error);
-      res.status(500).json({ error: error.message || "Failed to fetch user location" });
+      res.status(500).json({ error: (error as { message?: string }).message || "Failed to fetch user location" });
     }
   });
 
@@ -553,9 +553,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: true,
         message: "Location saved successfully",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Save location error:", error);
-      res.status(500).json({ error: error.message || "Failed to save user location" });
+      res.status(500).json({ error: (error as { message?: string }).message || "Failed to save user location" });
     }
   });
 
@@ -718,12 +718,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: true,
         message: "Analysis record has been successfully deleted",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Delete analysis error:", error);
-      if (error.message.includes('Unauthorized') || error.message.includes('not found')) {
-        return res.status(404).json({ error: error.message });
+      const errorMsg = (error as { message?: string }).message || "Failed to delete analysis";
+      if (errorMsg.includes('Unauthorized') || errorMsg.includes('not found')) {
+        return res.status(404).json({ error: errorMsg });
       }
-      res.status(500).json({ error: error.message || "Failed to delete analysis" });
+      res.status(500).json({ error: errorMsg });
     }
   });
 
@@ -742,9 +743,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: true,
         message: "Your data has been permanently deleted from MEDiscan's records.",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Delete error:", error);
-      res.status(500).json({ error: error.message || "Failed to delete user data" });
+      res.status(500).json({ error: (error as { message?: string }).message || "Failed to delete user data" });
     }
   });
 
