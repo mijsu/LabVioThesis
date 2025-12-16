@@ -262,13 +262,15 @@ export async function deleteUserLocation(userId: string): Promise<void> {
 
 // Extend Express Request to include authenticated user
 declare global {
-  namespace Express {
-    interface Request {
-      user?: {
-        uid: string;
-        email?: string;
-      };
-    }
+  namespace Express {}
+}
+
+declare module 'express' {
+  interface Request {
+    user?: {
+      uid: string;
+      email?: string;
+    };
   }
 }
 
