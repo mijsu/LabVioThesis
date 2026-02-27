@@ -516,16 +516,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
             parsedValues: { ph: 6.5, color: 'yellow', clarity: 'clear' },
           },
           comprehensiveAnalysis: {
-            detailedFindings: 'The specimen is clear and yellow, pH 6.5, specific gravity 1.015 and negative for protein, glucose, ketones, blood, and nitrites. These results are consistent with proper hydration and normal renal handling of solutes. Regular monitoring is advised as part of annual health checks.',
+            detailedFindings: 'The urinalysis specimen presents as clear with a pale yellow color, pH 6.5, and specific gravity of 1.015, all within normal ranges. Comprehensive testing reveals negative results for protein, glucose, ketones, blood, bilirubin, and nitrites, indicating excellent renal filtration and metabolic function. Microscopic examination would typically show minimal or no cells, casts, or crystals. These findings denote healthy kidney function, appropriate hydration status, and no evidence of urinary tract infection, diabetes complications, or metabolic disorders. Continue current lifestyle and monitor annually or as clinically indicated.',
             labValueBreakdown: [
-              { parameter: 'pH', value: '6.5', normalRange: '4.5-8.0', status: 'normal', interpretation: 'Acid-base balance maintained.' },
-              { parameter: 'Color', value: 'Yellow', normalRange: 'Straw to amber', status: 'normal', interpretation: 'Adequate hydration.' }
+              { parameter: 'pH', value: '6.5', normalRange: '4.5-8.0', status: 'normal', interpretation: 'Optimal acid-base balance maintained; reflects healthy dietary pattern.' },
+              { parameter: 'Color', value: 'Yellow', normalRange: 'Straw to amber', status: 'normal', interpretation: 'Pale yellow indicates adequate hydration and normal urochrome concentration.' },
+              { parameter: 'Clarity', value: 'Clear', normalRange: 'Clear', status: 'normal', interpretation: 'Absence of crystals, cells, or debris supports healthy renal function.' },
+              { parameter: 'Specific Gravity', value: '1.015', normalRange: '1.005-1.030', status: 'normal', interpretation: 'Normal concentration of solutes; reflects balanced fluid intake and kidney concentrating ability.' },
+              { parameter: 'Protein', value: 'Negative', normalRange: 'Negative', status: 'normal', interpretation: 'No proteinuria; glomerular filtration barrier intact.' },
+              { parameter: 'Glucose', value: 'Negative', normalRange: 'Negative', status: 'normal', interpretation: 'Blood glucose remains below renal threshold; no diabetes mellitus indicators.' },
+              { parameter: 'Ketones', value: 'Negative', normalRange: 'Negative', status: 'normal', interpretation: 'No ketone bodies; normal carbohydrate metabolism.' },
+              { parameter: 'Blood', value: 'Negative', normalRange: 'Negative', status: 'normal', interpretation: 'No hematuria; urinary tract is healthy with no bleeding.' },
+              { parameter: 'Nitrites', value: 'Negative', normalRange: 'Negative', status: 'normal', interpretation: 'No bacterial infection; urinary tract is free from gram-negative organisms.' },
+              { parameter: 'Leukocytes', value: 'Negative', normalRange: 'Negative', status: 'normal', interpretation: 'No white blood cells; no inflammatory response in urinary tract.' }
             ],
             lifestyleRecommendations: [
-              { category: 'Hydration', recommendation: 'Drink 8–10 glasses of water daily.', rationale: 'Keeps urine diluted and supports kidney function.' }
+              { category: 'Hydration', recommendation: 'Drink 8–10 glasses of water daily, more during exercise or hot weather.', rationale: 'Maintains optimal urine dilution and supports kidney filtration efficiency.' },
+              { category: 'Exercise', recommendation: 'Engage in moderate aerobic activity 150 minutes per week.', rationale: 'Improves cardiovascular and renal blood flow; supports overall metabolic health.' },
+              { category: 'Stress Management', recommendation: 'Practice meditation, yoga, or deep breathing for 10–15 minutes daily.', rationale: 'Reduces cortisol levels which can affect kidney function and blood pressure.' },
+              { category: 'Sleep Quality', recommendation: 'Maintain 7–9 hours of consistent sleep nightly.', rationale: 'Supports kidney regeneration and hormonal regulation of fluid balance.' },
+              { category: 'Regular Check-ups', recommendation: 'Schedule annual urinalysis and renal function tests.', rationale: 'Early detection of any changes ensures prompt intervention and sustained renal health.' }
             ],
             dietaryRecommendations: [
-              { category: 'Fruits & Vegetables', recommendation: 'Eat a variety daily.', rationale: 'Supports urinary tract and overall health.' }
+              { category: 'Vegetables', recommendation: 'Consume 2–3 cups of leafy greens and colorful vegetables daily.', rationale: 'Provides antioxidants and minerals that support kidney and urinary tract health.' },
+              { category: 'Lean Proteins', recommendation: 'Include poultry, fish, legumes, and tofu in meals.', rationale: 'Supports tissue repair without excessive kidney filtration burden.' },
+              { category: 'Sodium Intake', recommendation: 'Limit to under 2,300 mg daily; use herbs for seasoning instead of salt.', rationale: 'Reduces hypertension risk which is a major risk factor for chronic kidney disease.' },
+              { category: 'Hydrating Foods', recommendation: 'Eat water-rich foods like cucumbers, melons, and berries.', rationale: 'Contributes to daily fluid intake while providing beneficial phytonutrients.' },
+              { category: 'Whole Grains', recommendation: 'Choose whole wheat, oats, quinoa, and brown rice over refined grains.', rationale: 'High fiber content supports healthy digestion and stable blood glucose levels.' }
             ],
             suggestedSpecialists: []
           }
@@ -563,17 +579,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
             parsedValues: { wbc: 7.2, rbc: 5.1, hemoglobin: 14.0 },
           },
           comprehensiveAnalysis: {
-            detailedFindings: 'Hematologic parameters are normal; values support effective oxygen transport and immune response. No evidence of infection, inflammation, or anemia.',
+            detailedFindings: 'The complete blood count demonstrates excellent hematologic status with all parameters within normal reference ranges. White blood cell count of 7.2 K/uL indicates an intact immune system with no acute infection or inflammatory process. Red blood cell count of 5.1 M/uL coupled with hemoglobin of 14.0 g/dL and hematocrit of 42% indicates optimal oxygen-carrying capacity and no anemia. Platelet count of 250 K/uL reflects normal coagulation potential. Differential white blood cell count shows expected proportions with neutrophils at 55% and lymphocytes at 35%, suggesting balanced immune competence. Mean corpuscular volume (MCV) of 88 fL and mean corpuscular hemoglobin (MCH) of 27 pg indicate normocytic, normochromic red blood cells. Overall, these results indicate excellent hematologic integrity and optimal immune function.',
             labValueBreakdown: [
-              { parameter: 'WBC', value: '7.2', normalRange: '4.5-11.0 K/uL', status: 'normal', interpretation: 'Infection unlikely.' },
-              { parameter: 'RBC', value: '5.1', normalRange: '4.2-5.9 M/uL', status: 'normal', interpretation: 'Adequate red cell mass.' },
-              { parameter: 'Hemoglobin', value: '14.0', normalRange: '12.0-17.5 g/dL', status: 'normal', interpretation: 'Within healthy range.' }
+              { parameter: 'WBC', value: '7.2', normalRange: '4.5-11.0 K/uL', status: 'normal', interpretation: 'Optimal immune cell count; no active infection or immune suppression detected.' },
+              { parameter: 'RBC', value: '5.1', normalRange: '4.2-5.9 M/uL', status: 'normal', interpretation: 'Adequate red cell mass supports oxygen delivery to all tissues.' },
+              { parameter: 'Hemoglobin', value: '14.0', normalRange: '12.0-17.5 g/dL', status: 'normal', interpretation: 'Oxygen-carrying protein within optimal range; no anemia present.' },
+              { parameter: 'Hematocrit', value: '42%', normalRange: '36-46%', status: 'normal', interpretation: 'Percentage of red blood cells in blood volume is healthy.' },
+              { parameter: 'Platelets', value: '250', normalRange: '150-400 K/uL', status: 'normal', interpretation: 'Normal platelet count supports healthy clotting and hemostasis.' },
+              { parameter: 'MCV (Mean Corpuscular Volume)', value: '88', normalRange: '80-100 fL', status: 'normal', interpretation: 'Red blood cells are appropriately sized; no macro- or microcytosis.' },
+              { parameter: 'MCH (Mean Corpuscular Hemoglobin)', value: '27', normalRange: '27-33 pg', status: 'normal', interpretation: 'Hemoglobin content per cell is optimal.' },
+              { parameter: 'MCHC (Mean Corpuscular Hemoglobin Concentration)', value: '34%', normalRange: '32-36%', status: 'normal', interpretation: 'Hemoglobin concentration in red cells is within expected range.' },
+              { parameter: 'Neutrophils', value: '55%', normalRange: '50-70%', status: 'normal', interpretation: 'Primary immune defender cells at appropriate levels.' },
+              { parameter: 'Lymphocytes', value: '35%', normalRange: '20-40%', status: 'normal', interpretation: 'Adaptive immune cells present in balanced proportion.' }
             ],
             lifestyleRecommendations: [
-              { category: 'Exercise', recommendation: 'Maintain 150 minutes of moderate activity weekly.', rationale: 'Supports cardiovascular and hematologic health.' }
+              { category: 'Cardiovascular Exercise', recommendation: 'Perform 150 minutes of moderate aerobic activity weekly, such as brisk walking, cycling, or swimming.', rationale: 'Strengthens heart, improves blood circulation, and enhances oxygen delivery; supports hematologic stability.' },
+              { category: 'Strength Training', recommendation: 'Include resistance exercises 2–3 times per week targeting major muscle groups.', rationale: 'Builds muscle mass which increases metabolic rate and improves bone health; supports red blood cell homeostasis.' },
+              { category: 'Sleep Optimization', recommendation: 'Maintain 7–9 hours of quality sleep with consistent schedules.', rationale: 'Allows bone marrow to regenerate blood cells; essential for immune cell production.' },
+              { category: 'Stress Reduction', recommendation: 'Practice mindfulness meditation, tai chi, or yoga for 15–20 minutes daily.', rationale: 'Lowers cortisol and inflammatory markers; supports immune regulation.' },
+              { category: 'Smoking Cessation', recommendation: 'Avoid tobacco and secondhand smoke exposure completely.', rationale: 'Smoking impairs oxygen delivery and increases carbon monoxide, reducing hemoglobin efficiency.' }
             ],
             dietaryRecommendations: [
-              { category: 'Iron & Protein', recommendation: 'Eat lean meats and leafy greens.', rationale: 'Supports hemoglobin production.' }
+              { category: 'Iron-Rich Foods', recommendation: 'Consume red meat (beef, lean), organ meats (chicken liver), legumes (lentils, beans), and dark leafy greens 3–4 times per week.', rationale: 'Provides heme and non-heme iron essential for hemoglobin synthesis and red blood cell production.' },
+              { category: 'Vitamin C Sources', recommendation: 'Include citrus fruits, berries, bell peppers, and tomatoes with iron-containing meals.', rationale: 'Enhances non-heme iron absorption; supports immune function and collagen formation.' },
+              { category: 'Protein Intake', recommendation: 'Include 0.8–1.0 gram of protein per kilogram of body weight from diverse sources.', rationale: 'Supports hemoglobin synthesis, immune cell production, and tissue repair.' },
+              { category: 'B Vitamins', recommendation: 'Eat fortified cereals, eggs, dairy, fish, and legumes for B6, B12, and folate.', rationale: 'B vitamins are cofactors for red blood cell maturation and DNA synthesis.' },
+              { category: 'Copper & Zinc', recommendation: 'Include nuts, seeds, shellfish, and whole grains regularly.', rationale: 'These minerals are essential cofactors for hemoglobin formation and immune function.' }
             ],
             suggestedSpecialists: []
           }
@@ -920,16 +951,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
           parsedValues: { ph: 6.5, color: 'yellow', clarity: 'clear' },
         },
         comprehensiveAnalysis: {
-          detailedFindings: 'The specimen is clear and yellow, pH 6.5, specific gravity 1.015 and negative for protein, glucose, ketones, blood, and nitrites. These results are consistent with proper hydration and normal renal handling of solutes. Regular monitoring is advised as part of annual health checks.',
+          detailedFindings: 'The urinalysis specimen presents as clear with a pale yellow color, pH 6.5, and specific gravity of 1.015, all within normal ranges. Comprehensive testing reveals negative results for protein, glucose, ketones, blood, bilirubin, and nitrites, indicating excellent renal filtration and metabolic function. Microscopic examination would typically show minimal or no cells, casts, or crystals. These findings denote healthy kidney function, appropriate hydration status, and no evidence of urinary tract infection, diabetes complications, or metabolic disorders. Continue current lifestyle and monitor annually or as clinically indicated.',
           labValueBreakdown: [
-            { parameter: 'pH', value: '6.5', normalRange: '4.5-8.0', status: 'normal', interpretation: 'Acid-base balance maintained.' },
-            { parameter: 'Color', value: 'Yellow', normalRange: 'Straw to amber', status: 'normal', interpretation: 'Adequate hydration.' }
+            { parameter: 'pH', value: '6.5', normalRange: '4.5-8.0', status: 'normal', interpretation: 'Optimal acid-base balance maintained; reflects healthy dietary pattern.' },
+            { parameter: 'Color', value: 'Yellow', normalRange: 'Straw to amber', status: 'normal', interpretation: 'Pale yellow indicates adequate hydration and normal urochrome concentration.' },
+            { parameter: 'Clarity', value: 'Clear', normalRange: 'Clear', status: 'normal', interpretation: 'Absence of crystals, cells, or debris supports healthy renal function.' },
+            { parameter: 'Specific Gravity', value: '1.015', normalRange: '1.005-1.030', status: 'normal', interpretation: 'Normal concentration of solutes; reflects balanced fluid intake and kidney concentrating ability.' },
+            { parameter: 'Protein', value: 'Negative', normalRange: 'Negative', status: 'normal', interpretation: 'No proteinuria; glomerular filtration barrier intact.' },
+            { parameter: 'Glucose', value: 'Negative', normalRange: 'Negative', status: 'normal', interpretation: 'Blood glucose remains below renal threshold; no diabetes mellitus indicators.' },
+            { parameter: 'Ketones', value: 'Negative', normalRange: 'Negative', status: 'normal', interpretation: 'No ketone bodies; normal carbohydrate metabolism.' },
+            { parameter: 'Blood', value: 'Negative', normalRange: 'Negative', status: 'normal', interpretation: 'No hematuria; urinary tract is healthy with no bleeding.' },
+            { parameter: 'Nitrites', value: 'Negative', normalRange: 'Negative', status: 'normal', interpretation: 'No bacterial infection; urinary tract is free from gram-negative organisms.' },
+            { parameter: 'Leukocytes', value: 'Negative', normalRange: 'Negative', status: 'normal', interpretation: 'No white blood cells; no inflammatory response in urinary tract.' }
           ],
           lifestyleRecommendations: [
-            { category: 'Hydration', recommendation: 'Drink 8–10 glasses of water daily.', rationale: 'Keeps urine diluted and supports kidney function.' }
+            { category: 'Hydration', recommendation: 'Drink 8–10 glasses of water daily, more during exercise or hot weather.', rationale: 'Maintains optimal urine dilution and supports kidney filtration efficiency.' },
+            { category: 'Exercise', recommendation: 'Engage in moderate aerobic activity 150 minutes per week.', rationale: 'Improves cardiovascular and renal blood flow; supports overall metabolic health.' },
+            { category: 'Stress Management', recommendation: 'Practice meditation, yoga, or deep breathing for 10–15 minutes daily.', rationale: 'Reduces cortisol levels which can affect kidney function and blood pressure.' },
+            { category: 'Sleep Quality', recommendation: 'Maintain 7–9 hours of consistent sleep nightly.', rationale: 'Supports kidney regeneration and hormonal regulation of fluid balance.' },
+            { category: 'Regular Check-ups', recommendation: 'Schedule annual urinalysis and renal function tests.', rationale: 'Early detection of any changes ensures prompt intervention and sustained renal health.' }
           ],
           dietaryRecommendations: [
-            { category: 'Fruits & Vegetables', recommendation: 'Eat a variety daily.', rationale: 'Supports urinary tract and overall health.' }
+            { category: 'Vegetables', recommendation: 'Consume 2–3 cups of leafy greens and colorful vegetables daily.', rationale: 'Provides antioxidants and minerals that support kidney and urinary tract health.' },
+            { category: 'Lean Proteins', recommendation: 'Include poultry, fish, legumes, and tofu in meals.', rationale: 'Supports tissue repair without excessive kidney filtration burden.' },
+            { category: 'Sodium Intake', recommendation: 'Limit to under 2,300 mg daily; use herbs for seasoning instead of salt.', rationale: 'Reduces hypertension risk which is a major risk factor for chronic kidney disease.' },
+            { category: 'Hydrating Foods', recommendation: 'Eat water-rich foods like cucumbers, melons, and berries.', rationale: 'Contributes to daily fluid intake while providing beneficial phytonutrients.' },
+            { category: 'Whole Grains', recommendation: 'Choose whole wheat, oats, quinoa, and brown rice over refined grains.', rationale: 'High fiber content supports healthy digestion and stable blood glucose levels.' }
           ],
           suggestedSpecialists: []
         }
@@ -964,17 +1011,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
           parsedValues: { wbc: 7.2, rbc: 5.1, hemoglobin: 14.0 },
         },
         comprehensiveAnalysis: {
-          detailedFindings: 'Hematologic parameters are normal; values support effective oxygen transport and immune response. No evidence of infection, inflammation, or anemia.',
+          detailedFindings: 'The complete blood count demonstrates excellent hematologic status with all parameters within normal reference ranges. White blood cell count of 7.2 K/uL indicates an intact immune system with no acute infection or inflammatory process. Red blood cell count of 5.1 M/uL coupled with hemoglobin of 14.0 g/dL and hematocrit of 42% indicates optimal oxygen-carrying capacity and no anemia. Platelet count of 250 K/uL reflects normal coagulation potential. Differential white blood cell count shows expected proportions with neutrophils at 55% and lymphocytes at 35%, suggesting balanced immune competence. Mean corpuscular volume (MCV) of 88 fL and mean corpuscular hemoglobin (MCH) of 27 pg indicate normocytic, normochromic red blood cells. Overall, these results indicate excellent hematologic integrity and optimal immune function.',
           labValueBreakdown: [
-            { parameter: 'WBC', value: '7.2', normalRange: '4.5-11.0 K/uL', status: 'normal', interpretation: 'Infection unlikely.' },
-            { parameter: 'RBC', value: '5.1', normalRange: '4.2-5.9 M/uL', status: 'normal', interpretation: 'Adequate red cell mass.' },
-            { parameter: 'Hemoglobin', value: '14.0', normalRange: '12.0-17.5 g/dL', status: 'normal', interpretation: 'Within healthy range.' }
+            { parameter: 'WBC', value: '7.2', normalRange: '4.5-11.0 K/uL', status: 'normal', interpretation: 'Optimal immune cell count; no active infection or immune suppression detected.' },
+            { parameter: 'RBC', value: '5.1', normalRange: '4.2-5.9 M/uL', status: 'normal', interpretation: 'Adequate red cell mass supports oxygen delivery to all tissues.' },
+            { parameter: 'Hemoglobin', value: '14.0', normalRange: '12.0-17.5 g/dL', status: 'normal', interpretation: 'Oxygen-carrying protein within optimal range; no anemia present.' },
+            { parameter: 'Hematocrit', value: '42%', normalRange: '36-46%', status: 'normal', interpretation: 'Percentage of red blood cells in blood volume is healthy.' },
+            { parameter: 'Platelets', value: '250', normalRange: '150-400 K/uL', status: 'normal', interpretation: 'Normal platelet count supports healthy clotting and hemostasis.' },
+            { parameter: 'MCV (Mean Corpuscular Volume)', value: '88', normalRange: '80-100 fL', status: 'normal', interpretation: 'Red blood cells are appropriately sized; no macro- or microcytosis.' },
+            { parameter: 'MCH (Mean Corpuscular Hemoglobin)', value: '27', normalRange: '27-33 pg', status: 'normal', interpretation: 'Hemoglobin content per cell is optimal.' },
+            { parameter: 'MCHC (Mean Corpuscular Hemoglobin Concentration)', value: '34%', normalRange: '32-36%', status: 'normal', interpretation: 'Hemoglobin concentration in red cells is within expected range.' },
+            { parameter: 'Neutrophils', value: '55%', normalRange: '50-70%', status: 'normal', interpretation: 'Primary immune defender cells at appropriate levels.' },
+            { parameter: 'Lymphocytes', value: '35%', normalRange: '20-40%', status: 'normal', interpretation: 'Adaptive immune cells present in balanced proportion.' }
           ],
           lifestyleRecommendations: [
-            { category: 'Exercise', recommendation: 'Maintain 150 minutes of moderate activity weekly.', rationale: 'Supports cardiovascular and hematologic health.' }
+            { category: 'Cardiovascular Exercise', recommendation: 'Perform 150 minutes of moderate aerobic activity weekly, such as brisk walking, cycling, or swimming.', rationale: 'Strengthens heart, improves blood circulation, and enhances oxygen delivery; supports hematologic stability.' },
+            { category: 'Strength Training', recommendation: 'Include resistance exercises 2–3 times per week targeting major muscle groups.', rationale: 'Builds muscle mass which increases metabolic rate and improves bone health; supports red blood cell homeostasis.' },
+            { category: 'Sleep Optimization', recommendation: 'Maintain 7–9 hours of quality sleep with consistent schedules.', rationale: 'Allows bone marrow to regenerate blood cells; essential for immune cell production.' },
+            { category: 'Stress Reduction', recommendation: 'Practice mindfulness meditation, tai chi, or yoga for 15–20 minutes daily.', rationale: 'Lowers cortisol and inflammatory markers; supports immune regulation.' },
+            { category: 'Smoking Cessation', recommendation: 'Avoid tobacco and secondhand smoke exposure completely.', rationale: 'Smoking impairs oxygen delivery and increases carbon monoxide, reducing hemoglobin efficiency.' }
           ],
           dietaryRecommendations: [
-            { category: 'Iron & Protein', recommendation: 'Eat lean meats and leafy greens.', rationale: 'Supports hemoglobin production.' }
+            { category: 'Iron-Rich Foods', recommendation: 'Consume red meat (beef, lean), organ meats (chicken liver), legumes (lentils, beans), and dark leafy greens 3–4 times per week.', rationale: 'Provides heme and non-heme iron essential for hemoglobin synthesis and red blood cell production.' },
+            { category: 'Vitamin C Sources', recommendation: 'Include citrus fruits, berries, bell peppers, and tomatoes with iron-containing meals.', rationale: 'Enhances non-heme iron absorption; supports immune function and collagen formation.' },
+            { category: 'Protein Intake', recommendation: 'Include 0.8–1.0 gram of protein per kilogram of body weight from diverse sources.', rationale: 'Supports hemoglobin synthesis, immune cell production, and tissue repair.' },
+            { category: 'B Vitamins', recommendation: 'Eat fortified cereals, eggs, dairy, fish, and legumes for B6, B12, and folate.', rationale: 'B vitamins are cofactors for red blood cell maturation and DNA synthesis.' },
+            { category: 'Copper & Zinc', recommendation: 'Include nuts, seeds, shellfish, and whole grains regularly.', rationale: 'These minerals are essential cofactors for hemoglobin formation and immune function.' }
           ],
           suggestedSpecialists: []
         }
