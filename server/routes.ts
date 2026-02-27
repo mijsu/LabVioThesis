@@ -481,15 +481,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         getHealthAnalysesByUserId(userId),
       ]);
 
-      // if the user has no results yet, insert two example records automatically
+      // if the user has no results yet, insert two realistic example records automatically
       if (labResults.length === 0) {
-        console.log(`🔁 No lab results for ${userId}, inserting demo samples`);
+        console.log(`🔁 No lab results for ${userId}, inserting example records`);
         const now = new Date();
-        // urinalysis demo
+        // urinalysis sample with detailed context
         const uaId = await saveLabResult({
           userId,
           imageUrl: '',
-          fileName: 'urinalysis-demo.png',
+          fileName: 'urinalysis-sample.png',
           fileSize: 0,
           uploadedAt: now,
           status: 'completed',
@@ -500,23 +500,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
           userId,
           analyzedAt: now,
           riskLevel: 'low',
-          riskScore: 0.05,
-          findings: 'Sample urinalysis, normal values.',
-          healthInsights: ['Demo data, no action required'],
-          lifestyleRecommendations: ['Stay hydrated'],
-          dietaryRecommendations: ['Balanced diet'],
+          riskScore: 5,
+          findings: 'Urinalysis from a routine physical shows clear yellow urine with a pH of 6.5 and specific gravity of 1.015. No protein, glucose, ketones, blood, bilirubin, or nitrites were detected. Microscopic evaluation would likely reveal no cells or casts, indicating good renal function and hydration.',
+          healthInsights: [
+            'Color and clarity indicate adequate hydration.',
+            'pH is within the normal range of 4.5–8.0 which suggests balanced acid-base status.',
+          ],
+          lifestyleRecommendations: ['Maintain fluid intake of 2–3 liters per day and monitor urine color for changes.'],
+          dietaryRecommendations: ['Continue a balanced diet rich in fruits and vegetables and limit high-sodium foods.'],
           suggestedSpecialists: [],
           extractedData: {
             rawText: 'pH 6.5\nColor Yellow\nClarity Clear',
             parsedValues: { ph: 6.5, color: 'yellow', clarity: 'clear' },
           },
+          comprehensiveAnalysis: {
+            detailedFindings: 'The specimen is clear and yellow, pH 6.5, specific gravity 1.015 and negative for protein, glucose, ketones, blood, and nitrites. These results are consistent with proper hydration and normal renal handling of solutes. Regular monitoring is advised as part of annual health checks.',
+            labValueBreakdown: [
+              { parameter: 'pH', value: '6.5', normalRange: '4.5-8.0', status: 'normal', interpretation: 'Acid-base balance maintained.' },
+              { parameter: 'Color', value: 'Yellow', normalRange: 'Straw to amber', status: 'normal', interpretation: 'Adequate hydration.' }
+            ],
+            lifestyleRecommendations: [
+              { category: 'Hydration', recommendation: 'Drink 8–10 glasses of water daily.', rationale: 'Keeps urine diluted and supports kidney function.' }
+            ],
+            dietaryRecommendations: [
+              { category: 'Fruits & Vegetables', recommendation: 'Eat a variety daily.', rationale: 'Supports urinary tract and overall health.' }
+            ],
+            suggestedSpecialists: []
+          }
         });
 
-        // CBC demo
+        // CBC sample with expanded context
         const cbcId = await saveLabResult({
           userId,
           imageUrl: '',
-          fileName: 'cbc-demo.png',
+          fileName: 'cbc-sample.png',
           fileSize: 0,
           uploadedAt: now,
           status: 'completed',
@@ -527,16 +544,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
           userId,
           analyzedAt: now,
           riskLevel: 'low',
-          riskScore: 0.1,
-          findings: 'Sample CBC, normal counts.',
-          healthInsights: ['Demo data, no action required'],
-          lifestyleRecommendations: ['Regular exercise'],
-          dietaryRecommendations: ['Nutritious meals'],
+          riskScore: 10,
+          findings: 'Complete blood count is within normal limits: WBC 7.2 ×10^3/µL, RBC 5.1 ×10^6/µL, hemoglobin 14.0 g/dL, hematocrit 42%, and platelets 250 ×10^3/µL. Differential would likely show neutrophils at 55% and lymphocytes at 35%.',
+          healthInsights: [
+            'No leukocytosis or anemia present.',
+            'Platelet count indicates good clotting function.'
+          ],
+          lifestyleRecommendations: ['Continue regular aerobic exercise and maintain a healthy weight.'],
+          dietaryRecommendations: ['Consume lean proteins and iron-rich foods with vitamin C to support hematologic health.'],
           suggestedSpecialists: [],
           extractedData: {
             rawText: 'WBC 7.2\nRBC 5.1\nHemoglobin 14.0',
             parsedValues: { wbc: 7.2, rbc: 5.1, hemoglobin: 14.0 },
           },
+          comprehensiveAnalysis: {
+            detailedFindings: 'Hematologic parameters are normal; values support effective oxygen transport and immune response. No evidence of infection, inflammation, or anemia.',
+            labValueBreakdown: [
+              { parameter: 'WBC', value: '7.2', normalRange: '4.5-11.0 K/uL', status: 'normal', interpretation: 'Infection unlikely.' },
+              { parameter: 'RBC', value: '5.1', normalRange: '4.2-5.9 M/uL', status: 'normal', interpretation: 'Adequate red cell mass.' },
+              { parameter: 'Hemoglobin', value: '14.0', normalRange: '12.0-17.5 g/dL', status: 'normal', interpretation: 'Within healthy range.' }
+            ],
+            lifestyleRecommendations: [
+              { category: 'Exercise', recommendation: 'Maintain 150 minutes of moderate activity weekly.', rationale: 'Supports cardiovascular and hematologic health.' }
+            ],
+            dietaryRecommendations: [
+              { category: 'Iron & Protein', recommendation: 'Eat lean meats and leafy greens.', rationale: 'Supports hemoglobin production.' }
+            ],
+            suggestedSpecialists: []
+          }
         });
 
         // re-fetch after seeding
