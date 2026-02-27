@@ -2,9 +2,45 @@
 import Tesseract from 'tesseract.js';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// OpenAI client. By default we read the API key from the environment
+// variable OPENAI_API_KEY. For quick demos you can also supply a hard-\
+// coded fallback, but **never** commit a real key – use this only in a \ 
+// local .env file or temporary test build.
+// Determine which API key and endpoint we'll use. If a Z.ai key is
+// supplied we treat it as an alternative provider; the OpenAI client can
+// still be used as long as we point it at Z.ai's base URL (they advertise an
+// OpenAI‑compatible API). The environment variables are:
+//   - OPENAI_API_KEY (primary)
+//   - DEMO_OPENAI_KEY (fallback for local demos)
+//   - ZAI_API_KEY  (use Z.ai instead of OpenAI)
+//   - ZAI_API_URL  (optional custom endpoint; defaults to https://api.z.ai)
+
+let openai: OpenAI;
+const zaiKey = process.env.ZAI_API_KEY;
+if (zaiKey) {
+  const zaiUrl = process.env.ZAI_API_URL || 'https://api.z.ai';
+  console.log('Using Z.ai API key. Base URL:', zaiUrl);
+  openai = new OpenAI({ apiKey: zaiKey, baseURL: zaiUrl });
+} else {
+  const chosenKey = process.env.OPENAI_API_KEY
+    ? 'OPENAI_API_KEY'
+    : process.env.DEMO_OPENAI_KEY
+    ? 'DEMO_OPENAI_KEY'
+    : null;
+
+  if (!chosenKey) {
+    console.warn(
+      '⚠️  No OpenAI API key provided. Set OPENAI_API_KEY or DEMO_OPENAI_KEY.'
+    );
+  } else {
+    console.log(`Using OpenAI key from ${chosenKey}`);
+  }
+
+  openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY || process.env.DEMO_OPENAI_KEY || '',
+  });
+}
+
 
 export interface OCRResult {
   text: string;
@@ -202,9 +238,22 @@ Return ONLY the JSON object, no other text.`
     console.log('Parsed lab values:', parsedValues);
     
     return parsedValues;
-  } catch (error) {
+} catch (error: any) {
     console.error('Error parsing lab values with OpenAI:', error);
-    // Fallback to empty object if OpenAI fails
+
+    // If we hit a quota or rate‑limit error, bubble a more descriptive
+    // message so the route handler can return a 503 instead of silently
+    // failing and triggering a MISMATCHED_LAB_TYPE response later.
+    if (error.status === 429 || error.code === 'insufficient_quota' ||
+        error.message?.toLowerCase().includes('quota')) {
+      throw new Error(
+        'OpenAI request failed (rate limit / quota). ' +
+        'Check your OPENAI_API_KEY and account billing.'
+      );
+    }
+
+    // Other errors fall back to an empty parse so the rest of the app
+    // continues working.
     return {};
   }
 }
