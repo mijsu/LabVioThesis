@@ -3,21 +3,17 @@
 
 import OpenAI from "openai";
 
-// Support both OpenAI and Z.ai API keys. Z.ai offers an OpenAI‑compatible
-// interface but requires pointing the client at a custom base URL.
-let openai: OpenAI;
-if (process.env.ZAI_API_KEY) {
-  const url = process.env.ZAI_API_URL || 'https://api.z.ai';
-  console.log('comprehensiveAnalysisService: using Z.ai key, baseURL=', url);
-  openai = new OpenAI({ apiKey: process.env.ZAI_API_KEY, baseURL: url });
-} else {
-  if (!process.env.OPENAI_API_KEY) {
-    console.warn('comprehensiveAnalysisService: no OPENAI_API_KEY set');
-  } else {
-    console.log('comprehensiveAnalysisService: using OpenAI API key');
-  }
-  openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || '' });
+// Z.ai API client initialization (OpenAI-compatible provider)
+const zaiKey = process.env.ZAI_API_KEY;
+if (!zaiKey) {
+  throw new Error(
+    'ZAI_API_KEY environment variable is not set. ' +
+    'Please configure your Z.ai API key before starting the service.'
+  );
 }
+
+const zaiUrl = process.env.ZAI_API_URL || 'https://api.z.ai';
+const openai = new OpenAI({ apiKey: zaiKey, baseURL: zaiUrl });
 
 export interface ComprehensiveAnalysis {
   detailedFindings: string;

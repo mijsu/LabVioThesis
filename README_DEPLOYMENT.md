@@ -51,6 +51,8 @@ If you must use Render, follow these steps:
    - `VITE_FIREBASE_PROJECT_ID=medchain-5af09`
    - `VITE_FIREBASE_APP_ID=<your-firebase-app-id>`
    - `GOOGLE_APPLICATION_CREDENTIALS_JSON=<your-service-account-json>`
+   - `ZAI_API_KEY=<your-z.ai-api-key>`
+   - `ZAI_API_URL=https://api.z.ai` (optional, defaults to this value)
 
 4. **Deploy:**
    - Click "Create Web Service"
@@ -64,6 +66,7 @@ If you must use Render, follow these steps:
 - ML predictions use the HuggingFace API (no ML server needed on Render)
 - Firebase Admin SDK is configured via environment variables
 - No persistent storage - use external databases/storage
+- **AI provider**: The backend uses **Z.ai API exclusively** for lab value parsing and comprehensive analysis. You must set `ZAI_API_KEY` with your Z.ai credentials. The service will fail to start if this variable is not provided.
 
 ## Configuration Files
 
@@ -73,6 +76,9 @@ If you must use Render, follow these steps:
 
 ## Environment Variables Required
 
+The following variables must be defined for the backend to function. The
+The following variables must be defined for the backend to function properly.
+
 | Variable | Description | Required |
 |----------|-------------|----------|
 | `ML_API_URL` | HuggingFace ML API endpoint | Yes |
@@ -80,6 +86,8 @@ If you must use Render, follow these steps:
 | `VITE_FIREBASE_PROJECT_ID` | Firebase project ID | Yes |
 | `VITE_FIREBASE_APP_ID` | Firebase app ID | Yes |
 | `GOOGLE_APPLICATION_CREDENTIALS_JSON` | Firebase service account JSON | Yes |
+| `ZAI_API_KEY` | Z.ai API key (required for OCR and analysis) | **Yes** |
+| `ZAI_API_URL` | Z.ai base URL (defaults to `https://api.z.ai` if not set) | No |
 
 ## Troubleshooting
 
