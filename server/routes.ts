@@ -481,6 +481,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
         getHealthAnalysesByUserId(userId),
       ]);
 
+      // if the user has no results yet, insert two example records automatically
+      if (labResults.length === 0) {
+        console.log(`🔁 No lab results for ${userId}, inserting demo samples`);
+        const now = new Date();
+        // urinalysis demo
+        const uaId = await saveLabResult({
+          userId,
+          imageUrl: '',
+          fileName: 'urinalysis-demo.png',
+          fileSize: 0,
+          uploadedAt: now,
+          status: 'completed',
+          labType: 'urinalysis',
+        });
+        await saveHealthAnalysis({
+          labResultId: uaId,
+          userId,
+          analyzedAt: now,
+          riskLevel: 'low',
+          riskScore: 0.05,
+          findings: 'Sample urinalysis, normal values.',
+          healthInsights: ['Demo data, no action required'],
+          lifestyleRecommendations: ['Stay hydrated'],
+          dietaryRecommendations: ['Balanced diet'],
+          suggestedSpecialists: [],
+          extractedData: {
+            rawText: 'pH 6.5\nColor Yellow\nClarity Clear',
+            parsedValues: { ph: 6.5, color: 'yellow', clarity: 'clear' },
+          },
+        });
+
+        // CBC demo
+        const cbcId = await saveLabResult({
+          userId,
+          imageUrl: '',
+          fileName: 'cbc-demo.png',
+          fileSize: 0,
+          uploadedAt: now,
+          status: 'completed',
+          labType: 'cbc',
+        });
+        await saveHealthAnalysis({
+          labResultId: cbcId,
+          userId,
+          analyzedAt: now,
+          riskLevel: 'low',
+          riskScore: 0.1,
+          findings: 'Sample CBC, normal counts.',
+          healthInsights: ['Demo data, no action required'],
+          lifestyleRecommendations: ['Regular exercise'],
+          dietaryRecommendations: ['Nutritious meals'],
+          suggestedSpecialists: [],
+          extractedData: {
+            rawText: 'WBC 7.2\nRBC 5.1\nHemoglobin 14.0',
+            parsedValues: { wbc: 7.2, rbc: 5.1, hemoglobin: 14.0 },
+          },
+        });
+
+        // re-fetch after seeding
+        const refreshed = await getLabResultsByUserId(userId);
+        const refreshedAnalyses = await getHealthAnalysesByUserId(userId);
+        return res.json({ success: true, data: { labResults: refreshed, analyses: refreshedAnalyses } });
+      }
+
       res.json({
         success: true,
         data: {
