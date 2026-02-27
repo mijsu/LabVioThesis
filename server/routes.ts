@@ -495,7 +495,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           status: 'completed',
           labType: 'urinalysis',
         });
-        await saveHealthAnalysis({
+        console.log(`✅ Created urinalysis lab result: ${uaId}`);
+        
+        const uaAnalysis = await saveHealthAnalysis({
           labResultId: uaId,
           userId,
           analyzedAt: now,
@@ -528,6 +530,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             suggestedSpecialists: []
           }
         });
+        console.log(`✅ Created urinalysis analysis: ${uaAnalysis}`);
 
         // CBC sample with expanded context
         const cbcId = await saveLabResult({
@@ -539,7 +542,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           status: 'completed',
           labType: 'cbc',
         });
-        await saveHealthAnalysis({
+        console.log(`✅ Created CBC lab result: ${cbcId}`);
+        
+        const cbcAnalysis = await saveHealthAnalysis({
           labResultId: cbcId,
           userId,
           analyzedAt: now,
@@ -573,10 +578,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
             suggestedSpecialists: []
           }
         });
+        console.log(`✅ Created CBC analysis: ${cbcAnalysis}`);
 
         // re-fetch after seeding
         const refreshed = await getLabResultsByUserId(userId);
         const refreshedAnalyses = await getHealthAnalysesByUserId(userId);
+        console.log(`✅ Seeding complete for ${userId}: ${refreshed.length} results, ${refreshedAnalyses.length} analyses`);
         return res.json({ success: true, data: { labResults: refreshed, analyses: refreshedAnalyses } });
       }
 
@@ -857,6 +864,135 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: unknown) {
       console.error("Delete error:", error);
       res.status(500).json({ error: (error as { message?: string }).message || "Failed to delete user data" });
+    }
+  });
+
+  // Debug endpoint: reseed data for a user
+  app.post("/api/debug/reseed/:userId", async (req, res) => {
+    try {
+      const { userId } = req.params;
+      if (!userId) {
+        return res.status(400).json({ error: "User ID is required" });
+      }
+
+      console.log(`🔁 [DEBUG] Force reseeding for ${userId}...`);
+
+      // Delete existing records
+      const existing = await getLabResultsByUserId(userId);
+      for (const result of existing) {
+        const analyses = await getHealthAnalysesByUserId(userId);
+        for (const analysis of analyses.filter(a => a.labResultId === result.id)) {
+          await deleteHealthAnalysis(analysis.id, userId);
+        }
+        await deleteLabResult(result.id, userId);
+      }
+
+      console.log(`🧹 Deleted ${existing.length} existing records`);
+
+      // Re-seed
+      const now = new Date();
+      const uaId = await saveLabResult({
+        userId,
+        imageUrl: '',
+        fileName: 'urinalysis-sample.png',
+        fileSize: 0,
+        uploadedAt: now,
+        status: 'completed',
+        labType: 'urinalysis',
+      });
+
+      await saveHealthAnalysis({
+        labResultId: uaId,
+        userId,
+        analyzedAt: now,
+        riskLevel: 'low',
+        riskScore: 5,
+        findings: 'Urinalysis from a routine physical shows clear yellow urine with a pH of 6.5 and specific gravity of 1.015. No protein, glucose, ketones, blood, bilirubin, or nitrites were detected. Microscopic evaluation would likely reveal no cells or casts, indicating good renal function and hydration.',
+        healthInsights: [
+          'Color and clarity indicate adequate hydration.',
+          'pH is within the normal range of 4.5–8.0 which suggests balanced acid-base status.',
+        ],
+        lifestyleRecommendations: ['Maintain fluid intake of 2–3 liters per day and monitor urine color for changes.'],
+        dietaryRecommendations: ['Continue a balanced diet rich in fruits and vegetables and limit high-sodium foods.'],
+        suggestedSpecialists: [],
+        extractedData: {
+          rawText: 'pH 6.5\nColor Yellow\nClarity Clear',
+          parsedValues: { ph: 6.5, color: 'yellow', clarity: 'clear' },
+        },
+        comprehensiveAnalysis: {
+          detailedFindings: 'The specimen is clear and yellow, pH 6.5, specific gravity 1.015 and negative for protein, glucose, ketones, blood, and nitrites. These results are consistent with proper hydration and normal renal handling of solutes. Regular monitoring is advised as part of annual health checks.',
+          labValueBreakdown: [
+            { parameter: 'pH', value: '6.5', normalRange: '4.5-8.0', status: 'normal', interpretation: 'Acid-base balance maintained.' },
+            { parameter: 'Color', value: 'Yellow', normalRange: 'Straw to amber', status: 'normal', interpretation: 'Adequate hydration.' }
+          ],
+          lifestyleRecommendations: [
+            { category: 'Hydration', recommendation: 'Drink 8–10 glasses of water daily.', rationale: 'Keeps urine diluted and supports kidney function.' }
+          ],
+          dietaryRecommendations: [
+            { category: 'Fruits & Vegetables', recommendation: 'Eat a variety daily.', rationale: 'Supports urinary tract and overall health.' }
+          ],
+          suggestedSpecialists: []
+        }
+      });
+
+      const cbcId = await saveLabResult({
+        userId,
+        imageUrl: '',
+        fileName: 'cbc-sample.png',
+        fileSize: 0,
+        uploadedAt: now,
+        status: 'completed',
+        labType: 'cbc',
+      });
+
+      await saveHealthAnalysis({
+        labResultId: cbcId,
+        userId,
+        analyzedAt: now,
+        riskLevel: 'low',
+        riskScore: 10,
+        findings: 'Complete blood count is within normal limits: WBC 7.2 ×10^3/µL, RBC 5.1 ×10^6/µL, hemoglobin 14.0 g/dL, hematocrit 42%, and platelets 250 ×10^3/µL. Differential would likely show neutrophils at 55% and lymphocytes at 35%.',
+        healthInsights: [
+          'No leukocytosis or anemia present.',
+          'Platelet count indicates good clotting function.'
+        ],
+        lifestyleRecommendations: ['Continue regular aerobic exercise and maintain a healthy weight.'],
+        dietaryRecommendations: ['Consume lean proteins and iron-rich foods with vitamin C to support hematologic health.'],
+        suggestedSpecialists: [],
+        extractedData: {
+          rawText: 'WBC 7.2\nRBC 5.1\nHemoglobin 14.0',
+          parsedValues: { wbc: 7.2, rbc: 5.1, hemoglobin: 14.0 },
+        },
+        comprehensiveAnalysis: {
+          detailedFindings: 'Hematologic parameters are normal; values support effective oxygen transport and immune response. No evidence of infection, inflammation, or anemia.',
+          labValueBreakdown: [
+            { parameter: 'WBC', value: '7.2', normalRange: '4.5-11.0 K/uL', status: 'normal', interpretation: 'Infection unlikely.' },
+            { parameter: 'RBC', value: '5.1', normalRange: '4.2-5.9 M/uL', status: 'normal', interpretation: 'Adequate red cell mass.' },
+            { parameter: 'Hemoglobin', value: '14.0', normalRange: '12.0-17.5 g/dL', status: 'normal', interpretation: 'Within healthy range.' }
+          ],
+          lifestyleRecommendations: [
+            { category: 'Exercise', recommendation: 'Maintain 150 minutes of moderate activity weekly.', rationale: 'Supports cardiovascular and hematologic health.' }
+          ],
+          dietaryRecommendations: [
+            { category: 'Iron & Protein', recommendation: 'Eat lean meats and leafy greens.', rationale: 'Supports hemoglobin production.' }
+          ],
+          suggestedSpecialists: []
+        }
+      });
+
+      const refreshed = await getLabResultsByUserId(userId);
+      const refreshedAnalyses = await getHealthAnalysesByUserId(userId);
+
+      console.log(`✅ [DEBUG] Reseeded ${refreshed.length} lab results and ${refreshedAnalyses.length} analyses`);
+
+      res.json({
+        success: true,
+        message: `Reseeded ${refreshed.length} records`,
+        data: { labResults: refreshed, analyses: refreshedAnalyses }
+      });
+    } catch (error: unknown) {
+      console.error("Debug reseed error:", error);
+      res.status(500).json({ error: (error as { message?: string }).message || "Failed to reseed" });
     }
   });
 
