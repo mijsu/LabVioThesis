@@ -1,8 +1,16 @@
+// Debug: log environment to see what's actually available
+console.log('📋 Environment variables present:');
+console.log('   ZAI_API_KEY:', process.env.ZAI_API_KEY ? '✅ SET' : '❌ NOT SET');
+console.log('   OPENAI_API_KEY:', process.env.OPENAI_API_KEY ? '✅ SET' : '❌ NOT SET');
+console.log('   NODE_ENV:', process.env.NODE_ENV);
+
 // Validate Z.ai API key is present BEFORE any other imports
 const zaiKey = process.env.ZAI_API_KEY?.trim();
 if (!zaiKey) {
   console.error('\n❌ FATAL ERROR: ZAI_API_KEY environment variable is not set or is empty.');
-  console.error('   Please configure ZAI_API_KEY in your environment before starting the service.\n');
+  console.error('   Please configure ZAI_API_KEY in your Render environment.');
+  console.error('   All environment variables:', Object.keys(process.env).filter(k => !k.includes('CREDENTIAL')).sort());
+  console.error();
   process.exit(1);
 }
 console.log('✅ ZAI_API_KEY is set and ready.\n');
