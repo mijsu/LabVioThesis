@@ -2,25 +2,20 @@
 import Tesseract from 'tesseract.js';
 import OpenAI from 'openai';
 
-// OpenAI client. By default we read the API key from the environment
-// variable OPENAI_API_KEY. For quick demos you can also supply a hard-\
-// coded fallback, but **never** commit a real key – use this only in a \ 
-// local .env file or temporary test build.
 // Z.ai API client initialization. Z.ai provides an OpenAI-compatible API.
-// The environment variables required are:
-//   - ZAI_API_KEY (required)
+// Required environment variables:
+//   - ZAI_API_KEY (required, must be a valid z.ai API key)
 //   - ZAI_API_URL (optional, defaults to https://api.z.ai)
 
-const zaiKey = process.env.ZAI_API_KEY;
+const zaiKey = process.env.ZAI_API_KEY?.trim();
 if (!zaiKey) {
-  throw new Error(
-    'ZAI_API_KEY environment variable is not set. ' +
-    'Please configure your Z.ai API key before starting the service.'
-  );
+  console.error('❌ FATAL: ZAI_API_KEY is not set or is empty.');
+  console.error('   Make sure to configure the ZAI_API_KEY environment variable.');
+  process.exit(1);
 }
 
-const zaiUrl = process.env.ZAI_API_URL || 'https://api.z.ai';
-console.log('\u2705 Z.ai API initialized. Base URL:', zaiUrl);
+const zaiUrl = process.env.ZAI_API_URL?.trim() || 'https://api.z.ai';
+console.log('✅ ocrService: Using Z.ai API. Base URL:', zaiUrl);
 
 const openai = new OpenAI({ apiKey: zaiKey, baseURL: zaiUrl });
 

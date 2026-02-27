@@ -4,15 +4,20 @@
 import OpenAI from "openai";
 
 // Z.ai API client initialization (OpenAI-compatible provider)
-const zaiKey = process.env.ZAI_API_KEY;
+// Required environment variables:
+//   - ZAI_API_KEY (required, must be a valid z.ai API key)
+//   - ZAI_API_URL (optional, defaults to https://api.z.ai)
+
+const zaiKey = process.env.ZAI_API_KEY?.trim();
 if (!zaiKey) {
-  throw new Error(
-    'ZAI_API_KEY environment variable is not set. ' +
-    'Please configure your Z.ai API key before starting the service.'
-  );
+  console.error('❌ FATAL: ZAI_API_KEY is not set or is empty.');
+  console.error('   Make sure to configure the ZAI_API_KEY environment variable.');
+  process.exit(1);
 }
 
-const zaiUrl = process.env.ZAI_API_URL || 'https://api.z.ai';
+const zaiUrl = process.env.ZAI_API_URL?.trim() || 'https://api.z.ai';
+console.log('✅ comprehensiveAnalysisService: Using Z.ai API. Base URL:', zaiUrl);
+
 const openai = new OpenAI({ apiKey: zaiKey, baseURL: zaiUrl });
 
 export interface ComprehensiveAnalysis {
