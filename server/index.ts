@@ -1,3 +1,12 @@
+// Validate Z.ai API key is present BEFORE any other imports
+const zaiKey = process.env.ZAI_API_KEY?.trim();
+if (!zaiKey) {
+  console.error('\n❌ FATAL ERROR: ZAI_API_KEY environment variable is not set or is empty.');
+  console.error('   Please configure ZAI_API_KEY in your environment before starting the service.\n');
+  process.exit(1);
+}
+console.log('✅ ZAI_API_KEY is set and ready.\n');
+
 // Disable GCE metadata service checks BEFORE any Firebase imports
 process.env.FIRESTORE_EMULATOR_HOST = '';
 process.env.GCE_METADATA_HOST = 'metadata.google.internal.invalid';
